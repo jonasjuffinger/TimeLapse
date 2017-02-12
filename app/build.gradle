@@ -1,0 +1,42 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 10
+    buildToolsVersion "20.0.0"
+
+    defaultConfig {
+        applicationId "com.jonasjuffinger.timelapse"
+        minSdkVersion 10
+        targetSdkVersion 10
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_6
+        targetCompatibility JavaVersion.VERSION_1_6
+    }
+}
+
+android.applicationVariants.all { variant ->
+    variant.outputs.each { output ->
+        def apkName = "TimeLapse-${output.baseName}-${variant.versionName}.apk"
+        output.outputFile = new File(output.outputFile.parent, apkName)
+    }
+}
+
+repositories {
+    jcenter()
+    maven { url "https://jitpack.io" }
+}
+
+dependencies {
+    provided 'com.github.ma1co.OpenMemories-Framework:stubs:-SNAPSHOT'
+    compile 'com.github.ma1co.OpenMemories-Framework:framework:-SNAPSHOT'
+}
