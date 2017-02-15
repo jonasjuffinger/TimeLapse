@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
+import com.sony.scalar.hardware.avio.DisplayManager;
 import com.github.ma1co.pmcademo.app.BaseActivity;
 
 public class SettingsActivity extends BaseActivity
@@ -29,7 +32,10 @@ public class SettingsActivity extends BaseActivity
     private int fps;
     private Spinner spnFps;
 
-    private Button bnStart, bnClose;
+    private Button bnStart, bnClose, bnDisplayOutput;
+    private ToggleButton tbBatterySaving;
+
+    private DisplayManager avioDisplayManager;
 
 
     @Override
@@ -43,8 +49,12 @@ public class SettingsActivity extends BaseActivity
 
         Logger.info("Hello World");
 
+        avioDisplayManager = new DisplayManager();
+
+        Logger.info(avioDisplayManager.getActiveDevice());
+
         interval = 1;
-        shots = 0;
+        shots = 1;
         fps = 24;
 
         tvIntervalValue = (TextView) findViewById(R.id.tvIntervalValue);
@@ -96,36 +106,37 @@ public class SettingsActivity extends BaseActivity
         tvShotsValue = (TextView) findViewById(R.id.tvShotsValue);
 
         sbShots = (AdvancedSeekBar) findViewById(R.id.sbShots);
-        sbShots.setMax(129);
+        sbShots.setMax(130);
         sbShots.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                int shotsTextValue = 0;
+                String shotsText;
 
                 i++;
 
-                if(i <= 20) {
+                if(i <= 20)
                     shots = i;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 36) {
+
+                else if(i <= 36)
                     shots = (i-20) * 5 + 20;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 80) {
+
+                else if(i <= 80)
                     shots = (i-36) * 20 + 120;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 100) {
+
+                else if(i <= 100)
                     shots = (i-80) * 50 + 1000;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 130) {
+
+                else if(i <= 130)
                     shots = (i-100) * 100 + 2000;
-                    shotsTextValue = shots;
+
+                shotsText = Integer.toString(shots);
+
+                if(i == 301) {
+                    shots = Integer.MAX_VALUE;
+                    shotsText = "inf";
                 }
 
-                tvShotsValue.setText("" + shotsTextValue);
+                tvShotsValue.setText(shotsText);
                 updateTimes();
             }
 
@@ -172,7 +183,46 @@ public class SettingsActivity extends BaseActivity
                 finish();
             }
         });
+
+        bnDisplayOutput = (Button) findViewById(R.id.bnDisplayOutput);
+        bnDisplayOutput.setOnClickListener(displayOutputOnClickListener);
+
+        tbBatterySaving = (ToggleButton) findViewById(R.id.tbBatterySaving);
+        tbBatterySaving.setOnCheckedChangeListener(batterySavingOnClickListener);
     }
+
+    View.OnClickListener displayOutputOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            String output = "";
+
+            if(avioDisplayManager.getActiveDevice().equals(DisplayManager.DEVICE_ID_PANEL))
+                output = DisplayManager.DEVICE_ID_FINDER;
+            else if(avioDisplayManager.getActiveDevice().equals(DisplayManager.DEVICE_ID_NONE))
+                output = DisplayManager.DEVICE_ID_PANEL;
+
+            try {
+                Logger.info("change output to " + output);
+                avioDisplayManager.switchDisplayOutputTo(output);
+            } catch (Exception e) {
+                Logger.error("avioDisplayManager.switchDisplayOutputTo(currentOutput);");
+                Logger.error(e.getMessage());
+                avioDisplayManager.switchDisplayOutputTo(DisplayManager.DEVICE_ID_PANEL);
+            }
+        }
+    };
+
+    CompoundButton.OnCheckedChangeListener batterySavingOnClickListener = new CompoundButton.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            if(b) {
+                avioDisplayManager.setSavingBatteryMode(DisplayManager.SAVING_BATTERY_ON);
+            }
+            else {
+                avioDisplayManager.setSavingBatteryMode(DisplayManager.SAVING_BATTERY_OFF);
+            }
+        }
+    };
 
     void updateTimes() {
         int duration = interval * shots;
