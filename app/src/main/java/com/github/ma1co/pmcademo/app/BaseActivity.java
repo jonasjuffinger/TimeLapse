@@ -2,6 +2,7 @@ package com.github.ma1co.pmcademo.app;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.view.KeyEvent;
 import com.sony.scalar.hardware.avio.DisplayManager;
 import com.sony.scalar.sysutil.ScalarInput;
@@ -19,6 +20,9 @@ public class BaseActivity extends Activity {
         setColorDepth(true);
         notifyAppInfo();
 
+        if(isInTest())
+            return;
+
         displayManager = new DisplayManager();
         displayManager.setDisplayStatusListener(new DisplayManager.DisplayEventListener() {
             @Override
@@ -34,6 +38,9 @@ public class BaseActivity extends Activity {
         super.onPause();
 
         setColorDepth(false);
+
+        if(isInTest())
+            return;
 
         displayManager.releaseDisplayStatusListener();
         displayManager.finish();
@@ -197,6 +204,9 @@ public class BaseActivity extends Activity {
     }
 
     protected void setColorDepth(boolean highQuality) {
+        if(isInTest())
+            return;
+
         Gpelibrary.GS_FRAMEBUFFER_TYPE type = highQuality ? Gpelibrary.GS_FRAMEBUFFER_TYPE.ABGR8888 : Gpelibrary.GS_FRAMEBUFFER_TYPE.RGBA4444;
         Gpelibrary.changeFrameBufferPixel(type);
     }
@@ -213,5 +223,10 @@ public class BaseActivity extends Activity {
 
     public DisplayManager getDisplayManager() {
         return displayManager;
+    }
+
+
+    public boolean isInTest() {
+        return Build.MODEL.equals("Android SDK built for x86");
     }
 }
