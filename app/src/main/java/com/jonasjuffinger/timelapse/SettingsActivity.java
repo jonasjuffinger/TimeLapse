@@ -52,88 +52,13 @@ public class SettingsActivity extends BaseActivity
 
         sbInterval = (AdvancedSeekBar) findViewById(R.id.sbInterval);
         sbInterval.setMax(46);
-        sbInterval.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                int intervalTextValue = 0;
-                String intervalUnit = "";
-
-                i++;
-
-                if(i <= 20) {
-                    interval = i;
-                    intervalTextValue = interval;
-                    intervalUnit = "s";
-                }
-                else if(i <= 28) {
-                    interval = (i-20) * 5 + 20;
-                    intervalTextValue = interval;
-                    intervalUnit = "s";
-                }
-                else if(i <= 37) {
-                    interval = (i-27) * 60;
-                    intervalTextValue = (i-27);
-                    intervalUnit = "min";
-                }
-                else if(i <= 47) {
-                    interval = ((i-37) * 5 + 10) * 60;
-                    intervalTextValue = (i-37) * 5 + 10;
-                    intervalUnit = "min";
-                }
-
-                tvIntervalValue.setText(""+intervalTextValue);
-                tvIntervalUnit.setText(intervalUnit);
-                updateTimes();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
-
+        sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
 
         tvShotsValue = (TextView) findViewById(R.id.tvShotsValue);
 
         sbShots = (AdvancedSeekBar) findViewById(R.id.sbShots);
-        sbShots.setMax(129);
-        sbShots.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                int shotsTextValue = 0;
-
-                i++;
-
-                if(i <= 20) {
-                    shots = i;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 36) {
-                    shots = (i-20) * 5 + 20;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 80) {
-                    shots = (i-36) * 20 + 120;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 100) {
-                    shots = (i-80) * 50 + 1000;
-                    shotsTextValue = shots;
-                }
-                else if(i <= 130) {
-                    shots = (i-100) * 100 + 2000;
-                    shotsTextValue = shots;
-                }
-
-                tvShotsValue.setText("" + shotsTextValue);
-                updateTimes();
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {}
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {}
-        });
+        sbShots.setMax(130);
+        sbShots.setOnSeekBarChangeListener(sbShotsOnSeekBarChangeListener);
 
         tvDurationValue = (TextView) findViewById(R.id.tvDurationValue);
         tvDurationUnit = (TextView) findViewById(R.id.tvDurationUnit);
@@ -142,37 +67,122 @@ public class SettingsActivity extends BaseActivity
 
         spnFps = (Spinner) findViewById(R.id.spnFps);
         spnFps.setSelection(0);
-        spnFps.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                String sfps = getResources().getStringArray(R.array.fps)[i];
-                fps = Integer.parseInt(sfps);
-                updateTimes();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView) {}
-        });
+        spnFps.setOnItemSelectedListener(spnFpsOnItemSelectedListener);
 
         bnStart = (Button) findViewById(R.id.bnStart);
-        bnStart.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(that, ShootActivity.class);
-                intent.putExtra(ShootActivity.EXTRA_INTERVAL, interval);
-                intent.putExtra(ShootActivity.EXTRA_SHOTCOUNT, shots);
-                startActivity(intent);
-            }
-        });
+        bnStart.setOnClickListener(bnStartOnClickListener);
 
         bnClose = (Button) findViewById(R.id.bnClose);
-        bnClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        bnClose.setOnClickListener(bnCloseOnClickListener);
     }
+
+    View.OnClickListener bnStartOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(that, ShootActivity.class);
+            intent.putExtra(ShootActivity.EXTRA_INTERVAL, interval);
+            intent.putExtra(ShootActivity.EXTRA_SHOTCOUNT, shots);
+            startActivity(intent);
+        }
+    },
+    bnCloseOnClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            finish();
+        }
+    };
+
+    SeekBar.OnSeekBarChangeListener sbIntervalOnSeekBarChangeListener
+            = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+            int intervalTextValue = 0;
+            String intervalUnit = "";
+
+            i++;
+
+            if(i <= 20) {
+                interval = i;
+                intervalTextValue = interval;
+                intervalUnit = "s";
+            }
+            else if(i <= 28) {
+                interval = (i-20) * 5 + 20;
+                intervalTextValue = interval;
+                intervalUnit = "s";
+            }
+            else if(i <= 37) {
+                interval = (i-27) * 60;
+                intervalTextValue = (i-27);
+                intervalUnit = "min";
+            }
+            else if(i <= 47) {
+                interval = ((i-37) * 5 + 10) * 60;
+                intervalTextValue = (i-37) * 5 + 10;
+                intervalUnit = "min";
+            }
+
+            tvIntervalValue.setText(Integer.toString(intervalTextValue));
+            tvIntervalUnit.setText(intervalUnit);
+            updateTimes();
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {}
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {}
+    },
+    sbShotsOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+            String shotsText;
+
+            i++;
+
+            if(i <= 20)
+                shots = i;
+
+            else if(i <= 36)
+                shots = (i-20) * 5 + 20;
+
+            else if(i <= 80)
+                shots = (i-36) * 20 + 120;
+
+            else if(i <= 100)
+                shots = (i-80) * 50 + 1000;
+
+            else if(i <= 130)
+                shots = (i-100) * 100 + 2000;
+
+            shotsText = Integer.toString(shots);
+
+            if(i == 301) {
+                shots = Integer.MAX_VALUE;
+                shotsText = "inf";
+            }
+
+            tvShotsValue.setText(shotsText);
+            updateTimes();
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {}
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {}
+    };
+
+    AdapterView.OnItemSelectedListener spnFpsOnItemSelectedListener
+            = new AdapterView.OnItemSelectedListener() {
+        @Override
+        public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            String sfps = getResources().getStringArray(R.array.fps)[i];
+            fps = Integer.parseInt(sfps);
+            updateTimes();
+        }
+
+        @Override
+        public void onNothingSelected(AdapterView<?> adapterView) {}
+    };
 
     void updateTimes() {
         int duration = interval * shots;
