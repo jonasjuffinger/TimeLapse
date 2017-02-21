@@ -4,186 +4,244 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:id="@+id/lRoot">
 
-    <LinearLayout
-        android:orientation="vertical"
+    <TabHost
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tabHost">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="50dp"
+                android:layout_height="25dp"
+                android:gravity="center_vertical|fill_horizontal" />
+
+            <FrameLayout
+                android:id="@android:id/tabcontent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="10dp">
+
+                <LinearLayout
+                    android:id="@+id/tab1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp">
+
+                        <TextView
+                            android:text="Interval"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lblInterval"
+                            android:textSize="20sp"
+                            android:gravity="center_vertical"
+                            android:layout_width="80dp" />
+
+                        <view
+                            android:layout_height="wrap_content"
+                            class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
+                            android:id="@+id/sbInterval"
+                            android:layout_width="0dp"
+                            android:gravity="center_vertical"
+                            android:layout_alignParentTop="true"
+                            android:layout_toLeftOf="@+id/tvIntervalValue"
+                            android:layout_toRightOf="@+id/lblInterval"
+                            android:layout_marginRight="10dp" />
+
+                        <TextView
+                            android:text="s"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvIntervalUnit"
+                            android:gravity="center_vertical"
+                            android:textSize="20sp"
+                            android:layout_width="40dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true" />
+
+                        <TextView
+                            android:text="1"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvIntervalValue"
+                            android:gravity="right|center_vertical"
+                            android:textSize="20sp"
+                            android:layout_alignParentTop="true"
+                            android:layout_toLeftOf="@+id/tvIntervalUnit"
+                            android:layout_marginRight="5dp"
+                            android:layout_width="25dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="20dp"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:text="Shots"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lblShots"
+                            android:textSize="20sp"
+                            android:gravity="center_vertical" />
+
+                        <view
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
+                            android:id="@+id/sbShots"
+                            android:gravity="center_vertical"
+                            android:layout_toRightOf="@+id/lblShots"
+                            android:layout_toLeftOf="@+id/tvShotsValue"
+                            android:layout_marginRight="10dp" />
+
+                        <TextView
+                            android:text="1"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvShotsValue"
+                            android:gravity="right|center_vertical"
+                            android:textSize="20sp"
+                            android:layout_alignParentTop="true"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginRight="10dp"
+                            android:layout_width="60dp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvDurationValue"
+                            android:textSize="20sp"
+                            android:gravity="right"
+                            android:text="0"
+                            android:layout_marginRight="10dp"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvDurationUnit"
+                            android:textSize="20sp"
+                            android:text="min"
+                            android:layout_alignParentTop="true"
+                            android:layout_toRightOf="@+id/tvDurationValue"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvVideoTimeValue"
+                            android:textSize="20sp"
+                            android:gravity="right"
+                            android:text="0"
+                            android:layout_marginRight="10dp"
+                            android:layout_alignParentTop="true"
+                            android:layout_toRightOf="@+id/tvDurationUnit"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tvVideoTimeUnit"
+                            android:textSize="20sp"
+                            android:text="s"
+                            android:layout_toRightOf="@+id/tvVideoTimeValue"
+                            android:layout_centerVertical="true" />
+
+                        <TextView
+                            android:text="fps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/lblFps"
+                            android:textSize="20sp"
+                            android:layout_centerVertical="true"
+                            android:layout_toLeftOf="@+id/spnFps"
+                            android:layout_marginRight="10dp" />
+
+                        <Spinner
+                            android:layout_width="80dp"
+                            android:id="@+id/spnFps"
+                            android:entries="@array/fps"
+                            style="@android:style/Widget.Spinner"
+                            android:layout_centerVertical="true"
+                            android:layout_height="40dp"
+                            android:layout_alignParentRight="true" />
+                    </RelativeLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/tab2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <CheckBox
+                            android:text="Turn Display off"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cbDisplayOff" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <CheckBox
+                            android:text="Silent Shutter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/cbSilentShutter" />
+                    </RelativeLayout>
+                </LinearLayout>
+            </FrameLayout>
+        </LinearLayout>
+    </TabHost>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="bottom"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentLeft="true">
 
-        <TextView
-            android:text="Settings"
-            android:layout_width="match_parent"
+        <Button
+            android:text="Close"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:id="@+id/lblSettings"
-            android:textSize="25sp"
-            android:layout_marginBottom="10dp" />
+            android:id="@+id/bnClose"
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp" />
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
+        <Button
+            android:text="Start"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp">
+            android:id="@+id/bnStart"
+            android:textSize="20sp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp" />
 
-            <TextView
-                android:text="Interval"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/lblInterval"
-                android:layout_weight="2"
-                android:textSize="20sp"
-                android:gravity="center_vertical" />
-
-            <view
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
-                android:id="@+id/sbInterval"
-                android:layout_weight="10" />
-
-            <TextView
-                android:text="1"
-                android:layout_height="match_parent"
-                android:id="@+id/tvIntervalValue"
-                android:layout_weight="1"
-                android:gravity="right|center_vertical"
-                android:layout_width="0dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="20sp" />
-
-            <TextView
-                android:text="s"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/tvIntervalUnit"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
-
-            <TextView
-                android:text="Shots"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/lblShots"
-                android:layout_weight="2"
-                android:textSize="20sp"
-                android:gravity="center_vertical" />
-
-            <view
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
-                android:id="@+id/sbShots"
-                android:layout_weight="10" />
-
-            <TextView
-                android:text="0"
-                android:layout_height="match_parent"
-                android:id="@+id/tvShotsValue"
-                android:layout_weight="2"
-                android:gravity="right|center_vertical"
-                android:layout_width="0dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:textSize="20sp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvDurationValue"
-                android:textSize="20sp"
-                android:gravity="right"
-                android:text="0"
-                android:layout_marginRight="10dp" />
-
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvDurationUnit"
-                android:textSize="20sp"
-                android:text="s" />
-
-            <TextView
-                android:layout_width="50dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvVideoTimeValue"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:gravity="right"
-                android:text="0"
-                android:layout_marginRight="10dp" />
-
-            <TextView
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/tvVideoTimeUnit"
-                android:textSize="20sp"
-                android:text="s" />
-
-            <View
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:layout_weight="1000000000" />
-
-            <TextView
-                android:text="fps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/lblFps"
-                android:layout_weight="1"
-                android:textSize="20sp"
-                android:layout_marginRight="10dp" />
-
-            <Spinner
-                android:layout_width="wrap_content"
-                android:id="@+id/spnFps"
-                android:entries="@array/fps"
-                style="@android:style/Widget.Spinner"
-                android:layout_height="40dp" />
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <Button
-                android:text="Start"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/bnStart"
-                android:layout_marginRight="10dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="10dp"
-                android:textSize="20sp" />
-
-            <Button
-                android:text="Close"
-                android:layout_width="100dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/bnClose"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
-                android:textSize="20sp" />
-
-        </RelativeLayout>
-
-    </LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

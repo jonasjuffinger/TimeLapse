@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SeekBar;
 import android.widget.Spinner;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.github.ma1co.pmcademo.app.BaseActivity;
@@ -15,11 +18,15 @@ public class SettingsActivity extends BaseActivity
 {
     private SettingsActivity that = this;
 
-    private int interval; // in seconds
+    private Settings settings;
+
+    private TabHost tabHost;
+
+    private Button bnStart, bnClose;
+
     private AdvancedSeekBar sbInterval;
     private TextView tvIntervalValue, tvIntervalUnit;
 
-    private int shots; // in seconds
     private AdvancedSeekBar sbShots;
     private TextView tvShotsValue;
 
@@ -29,7 +36,7 @@ public class SettingsActivity extends BaseActivity
     private int fps;
     private Spinner spnFps;
 
-    private Button bnStart, bnClose;
+    private CheckBox cbDisplayOff, cbSilentShutter;
 
 
     @Override
@@ -43,9 +50,29 @@ public class SettingsActivity extends BaseActivity
 
         Logger.info("Hello World");
 
-        interval = 1;
-        shots = 0;
+        settings = new Settings();
         fps = 24;
+
+        bnStart = (Button) findViewById(R.id.bnStart);
+        bnStart.setOnClickListener(bnStartOnClickListener);
+
+        bnClose = (Button) findViewById(R.id.bnClose);
+        bnClose.setOnClickListener(bnCloseOnClickListener);
+
+        tabHost = (TabHost)findViewById(R.id.tabHost);
+        tabHost.setup();
+
+        //Tab 1
+        TabHost.TabSpec spec = tabHost.newTabSpec("Tab One");
+        spec.setContent(R.id.tab1);
+        spec.setIndicator("");
+        tabHost.addTab(spec);
+
+        //Tab 2
+        spec = tabHost.newTabSpec("Tab Two");
+        spec.setContent(R.id.tab2);
+        spec.setIndicator("");
+        tabHost.addTab(spec);
 
         tvIntervalValue = (TextView) findViewById(R.id.tvIntervalValue);
         tvIntervalUnit = (TextView) findViewById(R.id.tvIntervalUnit);
@@ -69,19 +96,18 @@ public class SettingsActivity extends BaseActivity
         spnFps.setSelection(0);
         spnFps.setOnItemSelectedListener(spnFpsOnItemSelectedListener);
 
-        bnStart = (Button) findViewById(R.id.bnStart);
-        bnStart.setOnClickListener(bnStartOnClickListener);
+        cbDisplayOff = (CheckBox) findViewById(R.id.cbDisplayOff);
+        cbDisplayOff.setOnCheckedChangeListener(cbDisplayOffOnCheckListener);
 
-        bnClose = (Button) findViewById(R.id.bnClose);
-        bnClose.setOnClickListener(bnCloseOnClickListener);
+        cbSilentShutter = (CheckBox) findViewById(R.id.cbSilentShutter);
+        cbSilentShutter.setOnCheckedChangeListener(cbSilentShutterOnCheckListener);
     }
 
     View.OnClickListener bnStartOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent intent = new Intent(that, ShootActivity.class);
-            intent.putExtra(ShootActivity.EXTRA_INTERVAL, interval);
-            intent.putExtra(ShootActivity.EXTRA_SHOTCOUNT, shots);
+            settings.putInIntent(intent);
             startActivity(intent);
         }
     },
@@ -102,22 +128,22 @@ public class SettingsActivity extends BaseActivity
             i++;
 
             if(i <= 20) {
-                interval = i;
-                intervalTextValue = interval;
+                settings.interval = i;
+                intervalTextValue = settings.interval;
                 intervalUnit = "s";
             }
             else if(i <= 28) {
-                interval = (i-20) * 5 + 20;
-                intervalTextValue = interval;
+                settings.interval = (i-20) * 5 + 20;
+                intervalTextValue = settings.interval;
                 intervalUnit = "s";
             }
             else if(i <= 37) {
-                interval = (i-27) * 60;
+                settings.interval = (i-27) * 60;
                 intervalTextValue = (i-27);
                 intervalUnit = "min";
             }
             else if(i <= 47) {
-                interval = ((i-37) * 5 + 10) * 60;
+                settings.interval = ((i-37) * 5 + 10) * 60;
                 intervalTextValue = (i-37) * 5 + 10;
                 intervalUnit = "min";
             }
@@ -140,24 +166,24 @@ public class SettingsActivity extends BaseActivity
             i++;
 
             if(i <= 20)
-                shots = i;
+                settings.shotCount = i;
 
             else if(i <= 36)
-                shots = (i-20) * 5 + 20;
+                settings.shotCount = (i-20) * 5 + 20;
 
             else if(i <= 80)
-                shots = (i-36) * 20 + 120;
+                settings.shotCount = (i-36) * 20 + 120;
 
             else if(i <= 100)
-                shots = (i-80) * 50 + 1000;
+                settings.shotCount = (i-80) * 50 + 1000;
 
             else if(i <= 130)
-                shots = (i-100) * 100 + 2000;
+                settings.shotCount = (i-100) * 100 + 2000;
 
-            shotsText = Integer.toString(shots);
+            shotsText = Integer.toString(settings.shotCount);
 
             if(i == 301) {
-                shots = Integer.MAX_VALUE;
+                settings.shotCount = Integer.MAX_VALUE;
                 shotsText = "inf";
             }
 
@@ -184,9 +210,22 @@ public class SettingsActivity extends BaseActivity
         public void onNothingSelected(AdapterView<?> adapterView) {}
     };
 
+    CheckBox.OnCheckedChangeListener cbDisplayOffOnCheckListener = new CheckBox.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            settings.displayOff = b;
+        }
+    },
+    cbSilentShutterOnCheckListener = new CheckBox.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            settings.silentShutter = b;
+        }
+    };
+
     void updateTimes() {
-        int duration = interval * shots;
-        int videoTime = shots / fps;
+        int duration = settings.interval * settings.shotCount;
+        int videoTime = settings.shotCount / fps;
 
         if(duration < 60) {
             tvDurationValue.setText("" + duration);

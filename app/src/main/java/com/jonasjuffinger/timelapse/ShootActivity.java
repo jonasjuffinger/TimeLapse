@@ -11,18 +11,15 @@ import android.widget.TextView;
 import com.github.ma1co.pmcademo.app.BaseActivity;
 
 import com.sony.scalar.hardware.CameraEx;
+import com.sony.scalar.hardware.avio.DisplayManager;
 
 import java.io.IOException;
 import java.util.List;
 
 public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callback, CameraEx.ShutterListener
 {
-    public static final String EXTRA_INTERVAL = "com.jonasjuffinger.timelapse.INTERVAL";
-    public static final String EXTRA_SHOTCOUNT = "com.jonasjuffinger.timelapse.SHOTCOUNT";
+    private Settings settings;
 
-    Logger log;
-
-    private int interval, maxShotCount;
     private int shotCount;
 
     private TextView tvCount, tvInfo;
@@ -33,11 +30,12 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
     private CameraEx.AutoPictureReviewControl autoReviewControl;
     private int pictureReviewTime;
 
-
     private boolean stopPicturePreview;
     private boolean takingPicture;
 
     private long shootTime;
+
+    private Display display;
 
     private Handler shootRunnableHandler = new Handler();
     private final Runnable shootRunnable = new Runnable()
@@ -48,20 +46,26 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
             if(stopPicturePreview) {
                 stopPicturePreview = false;
                 camera.stopPreview();
+                display.off();
             }
 
-            if(shotCount < maxShotCount) {
-                long remainingTime = shootTime + interval * 1000 - System.currentTimeMillis();
+            if(shotCount < settings.shotCount) {
+                long remainingTime = shootTime + settings.interval * 1000 - System.currentTimeMillis();
 
                 log("  Remaining Time: " + Long.toString(remainingTime));
 
                 if (remainingTime <= 0) {
                     shoot();
+                    if(!settings.displayOff) {
+                        log(Boolean.toString(settings.displayOff));
+                        display.on();
+                    }
                 } else {
                     shootRunnableHandler.postDelayed(this, remainingTime);
                 }
             }
             else {
+                display.on();
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -80,8 +84,7 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         setContentView(R.layout.activity_shoot);
 
         Intent intent = getIntent();
-        interval = intent.getIntExtra(EXTRA_INTERVAL, 1);
-        maxShotCount = intent.getIntExtra(EXTRA_SHOTCOUNT, 0);
+        settings = Settings.getFromIntent(intent);
 
         shotCount = 0;
         takingPicture = false;
@@ -106,11 +109,25 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         autoReviewControl = new CameraEx.AutoPictureReviewControl();
         cameraEx.setAutoPictureReviewControl(autoReviewControl);
 
+
+        final Camera.Parameters params = cameraEx.createEmptyParameters();
+        final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(params);
+        modifier.setSilentShutterMode(settings.silentShutter);
+        cameraEx.getNormalCamera().setParameters(params);
+
+
         pictureReviewTime = autoReviewControl.getPictureReviewTime();
         log(Integer.toString(pictureReviewTime));
 
-        shootRunnableHandler.postDelayed(shootRunnable, interval * 1000);
+        shootRunnableHandler.postDelayed(shootRunnable, settings.interval * 1000);
 
+        display = new Display(getDisplayManager());
+
+        if(settings.displayOff) {
+            display.turnAutoOff(5000);
+        }
+
+        setAutoPowerOffMode(false);
     }
 
     @Override
@@ -121,6 +138,9 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
     @Override
     protected void onPause() {
+        display.on();
+        display.turnAutoOff(Display.NO_AUTO_OFF);
+
         super.onPause();
 
         log("on pause");
@@ -149,6 +169,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
             cameraEx.release();
             cameraEx = null;
         }
+
+        setAutoPowerOffMode(true);
     }
 
 
@@ -187,10 +209,10 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
         camera.startPreview();
 
-        if(shotCount < maxShotCount) {
+        if(shotCount < settings.shotCount) {
 
             // remaining time to the next shot
-            long remainingTime = shootTime + interval * 1000 - System.currentTimeMillis();
+            long remainingTime = shootTime + settings.interval * 1000 - System.currentTimeMillis();
 
             log("Remaining Time: " + Long.toString(remainingTime));
 
@@ -212,6 +234,10 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         }
     }
 
+    @Override
+    protected void onAnyKeyDown() {
+        display.on();
+    }
 
 
     @Override

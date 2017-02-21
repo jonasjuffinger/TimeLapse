@@ -49,6 +49,8 @@ public class BaseActivity extends Activity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        onAnyKeyDown();
+
         switch (event.getScanCode()) {
             case ScalarInput.ISV_KEY_UP:
                 return onUpKeyDown();
@@ -99,6 +101,8 @@ public class BaseActivity extends Activity {
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        onAnyKeyUp();
+
         switch (event.getScanCode()) {
             case ScalarInput.ISV_KEY_UP:
                 return onUpKeyUp();
@@ -190,6 +194,9 @@ public class BaseActivity extends Activity {
         onBackPressed();
         return true;
     }
+
+    protected void onAnyKeyDown() {}
+    protected void onAnyKeyUp() {}
 
     public void onDisplayChanged(String device) {
         AppNotificationManager.getInstance().notify(NOTIFICATION_DISPLAY_CHANGED);
