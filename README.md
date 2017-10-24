@@ -1,6 +1,8 @@
 # TimeLapse
 A time lapse app for Sony Alpha cameras using the [OpenMemories: Framework](https://github.com/ma1co/OpenMemories-Framework).
 
+I have only a a6300 to test it, if you have another camera I would be happy to receive bug reports.
+
 ## Installation ##
 Use [Sony-PMCA-RE](https://github.com/ma1co/Sony-PMCA-RE) or install through [sony-pmca.appspot.com](https://sony-pmca.appspot.com/apps).
 
