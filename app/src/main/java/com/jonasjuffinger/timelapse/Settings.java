@@ -21,7 +21,7 @@ class Settings {
         interval = 1;
         shotCount = 1;
         displayOff = false;
-        silentShutter = false;
+        silentShutter = true;
     }
 
     public Settings(int interval, int shotCount, boolean displayOff, boolean silentShutter) {

@@ -36,7 +36,7 @@ public class SettingsActivity extends BaseActivity
     private int fps;
     private Spinner spnFps;
 
-    private CheckBox cbDisplayOff, cbSilentShutter;
+    private CheckBox cbSilentShutter;
 
 
     @Override
@@ -78,7 +78,7 @@ public class SettingsActivity extends BaseActivity
         tvIntervalUnit = (TextView) findViewById(R.id.tvIntervalUnit);
 
         sbInterval = (AdvancedSeekBar) findViewById(R.id.sbInterval);
-        sbInterval.setMax(46);
+        sbInterval.setMax(83);
         sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
 
         tvShotsValue = (TextView) findViewById(R.id.tvShotsValue);
@@ -95,9 +95,6 @@ public class SettingsActivity extends BaseActivity
         spnFps = (Spinner) findViewById(R.id.spnFps);
         spnFps.setSelection(0);
         spnFps.setOnItemSelectedListener(spnFpsOnItemSelectedListener);
-
-        cbDisplayOff = (CheckBox) findViewById(R.id.cbDisplayOff);
-        cbDisplayOff.setOnCheckedChangeListener(cbDisplayOffOnCheckListener);
 
         cbSilentShutter = (CheckBox) findViewById(R.id.cbSilentShutter);
         cbSilentShutter.setOnCheckedChangeListener(cbSilentShutterOnCheckListener);
@@ -127,24 +124,19 @@ public class SettingsActivity extends BaseActivity
 
             i++;
 
-            if(i <= 20) {
+            if(i <= 40) {
                 settings.interval = i;
                 intervalTextValue = settings.interval;
                 intervalUnit = "s";
             }
-            else if(i <= 28) {
-                settings.interval = (i-20) * 5 + 20;
+            else if(i <= 56) {
+                settings.interval = (i-40) * 5 + 40;
                 intervalTextValue = settings.interval;
                 intervalUnit = "s";
             }
-            else if(i <= 37) {
-                settings.interval = (i-27) * 60;
-                intervalTextValue = (i-27);
-                intervalUnit = "min";
-            }
-            else if(i <= 47) {
-                settings.interval = ((i-37) * 5 + 10) * 60;
-                intervalTextValue = (i-37) * 5 + 10;
+            else if(i <= 84) {
+                settings.interval = (i-54) * 60;
+                intervalTextValue = (i-54);
                 intervalUnit = "min";
             }
 
@@ -171,18 +163,18 @@ public class SettingsActivity extends BaseActivity
             else if(i <= 36)
                 settings.shotCount = (i-20) * 5 + 20;
 
-            else if(i <= 80)
-                settings.shotCount = (i-36) * 20 + 120;
+            else if(i <= 81)
+                settings.shotCount = (i-36) * 20 + 100;
 
             else if(i <= 100)
-                settings.shotCount = (i-80) * 50 + 1000;
+                settings.shotCount = (i-81) * 50 + 1000;
 
             else if(i <= 130)
                 settings.shotCount = (i-100) * 100 + 2000;
 
             shotsText = Integer.toString(settings.shotCount);
 
-            if(i == 301) {
+            if(i == 131) {
                 settings.shotCount = Integer.MAX_VALUE;
                 shotsText = "inf";
             }
@@ -210,13 +202,7 @@ public class SettingsActivity extends BaseActivity
         public void onNothingSelected(AdapterView<?> adapterView) {}
     };
 
-    CheckBox.OnCheckedChangeListener cbDisplayOffOnCheckListener = new CheckBox.OnCheckedChangeListener() {
-        @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            settings.displayOff = b;
-        }
-    },
-    cbSilentShutterOnCheckListener = new CheckBox.OnCheckedChangeListener() {
+    CheckBox.OnCheckedChangeListener cbSilentShutterOnCheckListener = new CheckBox.OnCheckedChangeListener() {
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             settings.silentShutter = b;
@@ -224,6 +210,15 @@ public class SettingsActivity extends BaseActivity
     };
 
     void updateTimes() {
+        if(settings.shotCount == Integer.MAX_VALUE)
+        {
+            tvDurationValue.setText("inf");
+            tvDurationUnit.setText("");
+            tvVideoTimeValue.setText("inf");
+            tvVideoTimeUnit.setText("");
+            return;
+        }
+
         int duration = settings.interval * settings.shotCount;
         int videoTime = settings.shotCount / fps;
 

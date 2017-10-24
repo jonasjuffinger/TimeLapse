@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 import android.widget.TextView;
 
 import com.github.ma1co.pmcademo.app.BaseActivity;
@@ -22,8 +23,9 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
     private int shotCount;
 
-    private TextView tvCount, tvInfo;
+    private TextView tvCount; //, tvInfo;
 
+    private SurfaceView reviewSurfaceView;
     private SurfaceHolder cameraSurfaceHolder;
     private CameraEx cameraEx;
     private Camera camera;
@@ -46,7 +48,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
             if(stopPicturePreview) {
                 stopPicturePreview = false;
                 camera.stopPreview();
-                display.off();
+                reviewSurfaceView.setVisibility(View.GONE);
+                //display.off();
             }
 
             if(shotCount < settings.shotCount) {
@@ -54,14 +57,14 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
                 log("  Remaining Time: " + Long.toString(remainingTime));
 
-                if (remainingTime <= 0) {
+                if (remainingTime <= 150) { // 300ms is vaguely the time this postDelayed is to slow
                     shoot();
                     if(!settings.displayOff) {
                         log(Boolean.toString(settings.displayOff));
                         display.on();
                     }
                 } else {
-                    shootRunnableHandler.postDelayed(this, remainingTime);
+                    shootRunnableHandler.postDelayed(this, remainingTime-150);
                 }
             }
             else {
@@ -90,10 +93,11 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         takingPicture = false;
 
         tvCount = (TextView) findViewById(R.id.tvCount);
-        tvInfo = (TextView) findViewById(R.id.tvInfo);
+        //tvInfo = (TextView) findViewById(R.id.tvInfo);
 
-        SurfaceView surfaceView = (SurfaceView) findViewById(R.id.surfaceView);
-        cameraSurfaceHolder = surfaceView.getHolder();
+        reviewSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
+        reviewSurfaceView.setZOrderOnTop(false);
+        cameraSurfaceHolder = reviewSurfaceView.getHolder();
         cameraSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
     }
 
@@ -107,14 +111,13 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         cameraEx.setShutterListener(this);
         cameraSurfaceHolder.addCallback(this);
         autoReviewControl = new CameraEx.AutoPictureReviewControl();
+        //autoReviewControl.setPictureReviewInfoHist(true);
         cameraEx.setAutoPictureReviewControl(autoReviewControl);
-
 
         final Camera.Parameters params = cameraEx.createEmptyParameters();
         final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(params);
         modifier.setSilentShutterMode(settings.silentShutter);
         cameraEx.getNormalCamera().setParameters(params);
-
 
         pictureReviewTime = autoReviewControl.getPictureReviewTime();
         log(Integer.toString(pictureReviewTime));
@@ -224,6 +227,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
             // show the preview picture for some time
             else {
                 long previewPictureShowTime = Math.min(remainingTime, pictureReviewTime * 1000);
+                log("  Stop preview in: " + Long.toString(previewPictureShowTime));
+                reviewSurfaceView.setVisibility(View.VISIBLE);
                 stopPicturePreview = true;
                 shootRunnableHandler.postDelayed(shootRunnable, previewPictureShowTime);
             }

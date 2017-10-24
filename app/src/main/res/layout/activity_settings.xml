@@ -34,152 +34,152 @@
                     android:orientation="vertical">
 
                     <RelativeLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp">
+                        android:layout_marginBottom="10dp"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:text="Interval"
-                            android:layout_height="wrap_content"
                             android:id="@+id/lblInterval"
-                            android:textSize="20sp"
+                            android:layout_width="80dp"
+                            android:layout_height="wrap_content"
                             android:gravity="center_vertical"
-                            android:layout_width="80dp" />
+                            android:text="Interval"
+                            android:textSize="20sp" />
 
                         <view
-                            android:layout_height="wrap_content"
-                            class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
                             android:id="@+id/sbInterval"
+                            class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
                             android:layout_width="0dp"
-                            android:gravity="center_vertical"
+                            android:layout_height="wrap_content"
                             android:layout_alignParentTop="true"
+                            android:layout_marginRight="10dp"
                             android:layout_toLeftOf="@+id/tvIntervalValue"
                             android:layout_toRightOf="@+id/lblInterval"
-                            android:layout_marginRight="10dp" />
-
-                        <TextView
-                            android:text="s"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tvIntervalUnit"
-                            android:gravity="center_vertical"
-                            android:textSize="20sp"
-                            android:layout_width="40dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_alignParentRight="true" />
-
-                        <TextView
-                            android:text="1"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tvIntervalValue"
-                            android:gravity="right|center_vertical"
-                            android:textSize="20sp"
-                            android:layout_alignParentTop="true"
-                            android:layout_toLeftOf="@+id/tvIntervalUnit"
-                            android:layout_marginRight="5dp"
-                            android:layout_width="25dp" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:orientation="horizontal"
-                        android:layout_width="match_parent"
-                        android:layout_marginBottom="20dp"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:text="Shots"
-                            android:layout_width="80dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/lblShots"
-                            android:textSize="20sp"
                             android:gravity="center_vertical" />
 
-                        <view
-                            android:layout_width="0dp"
+                        <TextView
+                            android:id="@+id/tvIntervalUnit"
+                            android:layout_width="40dp"
                             android:layout_height="wrap_content"
-                            class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
-                            android:id="@+id/sbShots"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
                             android:gravity="center_vertical"
-                            android:layout_toRightOf="@+id/lblShots"
-                            android:layout_toLeftOf="@+id/tvShotsValue"
-                            android:layout_marginRight="10dp" />
+                            android:text="s"
+                            android:textSize="20sp" />
 
                         <TextView
-                            android:text="1"
+                            android:id="@+id/tvIntervalValue"
+                            android:layout_width="25dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tvShotsValue"
-                            android:gravity="right|center_vertical"
-                            android:textSize="20sp"
                             android:layout_alignParentTop="true"
-                            android:layout_alignParentRight="true"
-                            android:layout_marginRight="10dp"
-                            android:layout_width="60dp" />
+                            android:layout_marginRight="5dp"
+                            android:layout_toLeftOf="@+id/tvIntervalUnit"
+                            android:gravity="right|center_vertical"
+                            android:text="1"
+                            android:textSize="20sp" />
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:orientation="horizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:orientation="horizontal">
 
                         <TextView
-                            android:layout_width="50dp"
+                            android:id="@+id/lblShots"
+                            android:layout_width="80dp"
                             android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:text="Shots"
+                            android:textSize="20sp" />
+
+                        <view
+                            android:id="@+id/sbShots"
+                            class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:layout_toLeftOf="@+id/tvShotsValue"
+                            android:layout_toRightOf="@+id/lblShots"
+                            android:gravity="center_vertical" />
+
+                        <TextView
+                            android:id="@+id/tvShotsValue"
+                            android:layout_width="60dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_alignParentTop="true"
+                            android:layout_marginRight="10dp"
+                            android:gravity="right|center_vertical"
+                            android:text="1"
+                            android:textSize="20sp" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
                             android:id="@+id/tvDurationValue"
-                            android:textSize="20sp"
-                            android:gravity="right"
-                            android:text="0"
-                            android:layout_marginRight="10dp"
-                            android:layout_centerVertical="true" />
-
-                        <TextView
-                            android:layout_width="35dp"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/tvDurationUnit"
-                            android:textSize="20sp"
-                            android:text="min"
-                            android:layout_alignParentTop="true"
-                            android:layout_toRightOf="@+id/tvDurationValue"
-                            android:layout_centerVertical="true" />
-
-                        <TextView
                             android:layout_width="50dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tvVideoTimeValue"
-                            android:textSize="20sp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
                             android:gravity="right"
                             android:text="0"
-                            android:layout_marginRight="10dp"
-                            android:layout_alignParentTop="true"
-                            android:layout_toRightOf="@+id/tvDurationUnit"
-                            android:layout_centerVertical="true" />
+                            android:textSize="20sp" />
 
                         <TextView
+                            android:id="@+id/tvDurationUnit"
                             android:layout_width="35dp"
                             android:layout_height="wrap_content"
-                            android:id="@+id/tvVideoTimeUnit"
-                            android:textSize="20sp"
-                            android:text="s"
-                            android:layout_toRightOf="@+id/tvVideoTimeValue"
-                            android:layout_centerVertical="true" />
+                            android:layout_alignParentTop="true"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/tvDurationValue"
+                            android:text="min"
+                            android:textSize="20sp" />
 
                         <TextView
-                            android:text="fps"
+                            android:id="@+id/tvVideoTimeValue"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentTop="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:layout_toRightOf="@+id/tvDurationUnit"
+                            android:gravity="right"
+                            android:text="0"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/tvVideoTimeUnit"
+                            android:layout_width="35dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/tvVideoTimeValue"
+                            android:text="s"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/lblFps"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/lblFps"
-                            android:textSize="20sp"
                             android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
                             android:layout_toLeftOf="@+id/spnFps"
-                            android:layout_marginRight="10dp" />
+                            android:text="fps"
+                            android:textSize="20sp" />
 
                         <Spinner
-                            android:layout_width="80dp"
                             android:id="@+id/spnFps"
-                            android:entries="@array/fps"
                             style="@android:style/Widget.Spinner"
-                            android:layout_centerVertical="true"
+                            android:layout_width="80dp"
                             android:layout_height="40dp"
-                            android:layout_alignParentRight="true" />
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:entries="@array/fps" />
                     </RelativeLayout>
                 </LinearLayout>
 
@@ -194,21 +194,11 @@
                         android:layout_height="match_parent">
 
                         <CheckBox
-                            android:text="Turn Display off"
+                            android:id="@+id/cbSilentShutter"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:id="@+id/cbDisplayOff" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <CheckBox
-                            android:text="Silent Shutter"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:id="@+id/cbSilentShutter" />
+                            android:checked="true"
+                            android:text="Silent Shutter" />
                     </RelativeLayout>
                 </LinearLayout>
             </FrameLayout>
