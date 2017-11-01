@@ -116,7 +116,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
         final Camera.Parameters params = cameraEx.createEmptyParameters();
         final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(params);
-        modifier.setSilentShutterMode(settings.silentShutter);
+        if(modifier.isSupportedSilentShutterMode())
+            modifier.setSilentShutterMode(settings.silentShutter);
         cameraEx.getNormalCamera().setParameters(params);
 
         pictureReviewTime = autoReviewControl.getPictureReviewTime();

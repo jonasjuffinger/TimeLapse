@@ -2,14 +2,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 10
-    buildToolsVersion "20.0.0"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.jonasjuffinger.timelapse"
         minSdkVersion 10
         targetSdkVersion 10
-        versionCode 3
-        versionName "0.3"
+        versionCode 4
+        versionName "0.3.1"
     }
     buildTypes {
         release {
@@ -25,9 +25,8 @@ android {
 }
 
 android.applicationVariants.all { variant ->
-    variant.outputs.each { output ->
-        def apkName = "TimeLapse-${output.baseName}-${variant.versionName}.apk"
-        output.outputFile = new File(output.outputFile.parent, apkName)
+    variant.outputs.all { output ->
+        outputFileName =  "TimeLapse-${output.baseName}-${variant.versionName}.apk"
     }
 }
 
