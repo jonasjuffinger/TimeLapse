@@ -17,8 +17,4 @@ Finally click the start button and wait.
 
 You can stop by clicking the MENU button on the camera.
 
-## Known issues ##
-Doesn't work on cameras that do not have silent shutter mode. I'm working on a fix for this problem.
-Incomplete list of affected cameras:
- - a6000 
- - RX100M3 
+The silent shutter option is functionless on cameras without silent shutter mode.
