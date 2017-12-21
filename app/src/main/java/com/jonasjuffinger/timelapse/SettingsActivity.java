@@ -241,12 +241,29 @@ public class SettingsActivity extends BaseActivity
         }
     }
 
+    protected boolean onUpperDialChanged(int value) {
+        sbInterval.dialChanged(value);
+        sbShots.dialChanged(value);
+        return true;
+    }
+
     protected boolean onLowerDialChanged(int value) {
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
         return true;
     }
 
+    protected boolean onThirdDialChanged(int value) {
+        sbInterval.dialChanged(value);
+        sbShots.dialChanged(value);
+        return true;
+    }
+
+    protected boolean onKuruDialChanged(int value) {
+        sbInterval.dialChanged(value);
+        sbShots.dialChanged(value);
+        return true;
+    }
 
     @Override
     protected boolean onMenuKeyUp()

@@ -92,6 +92,12 @@ public class BaseActivity extends Activity {
             case ScalarInput.ISV_DIAL_2_CLOCKWISE:
             case ScalarInput.ISV_DIAL_2_COUNTERCW:
                 return onLowerDialChanged(getDialStatus(ScalarInput.ISV_DIAL_2_STATUS) / 22);
+            case ScalarInput.ISV_DIAL_3_CLOCKWISE:
+            case ScalarInput.ISV_DIAL_3_COUNTERCW:
+                return onThirdDialChanged(getDialStatus(ScalarInput.ISV_DIAL_3_STATUS) / 22);
+            case ScalarInput.ISV_DIAL_KURU_CLOCKWISE:
+            case ScalarInput.ISV_DIAL_KURU_COUNTERCW:
+                return onKuruDialChanged(getDialStatus(ScalarInput.ISV_DIAL_KURU_STATUS) / 22);
             case ScalarInput.ISV_KEY_MODE_DIAL:
                 return onModeDialChanged(getDialStatus(ScalarInput.ISV_KEY_MODE_DIAL));
             default:
@@ -185,6 +191,8 @@ public class BaseActivity extends Activity {
     protected boolean onLensDetached() { return false; }
     protected boolean onUpperDialChanged(int value) { return false; }
     protected boolean onLowerDialChanged(int value) { return false; }
+    protected boolean onThirdDialChanged(int value) { return false; }
+    protected boolean onKuruDialChanged(int value) { return false; }
     protected boolean onModeDialChanged(int value) { return false; }
 
     protected boolean onDeleteKeyDown() {
