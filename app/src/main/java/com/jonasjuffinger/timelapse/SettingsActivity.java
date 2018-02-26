@@ -38,7 +38,6 @@ public class SettingsActivity extends BaseActivity
 
     private CheckBox cbSilentShutter;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -51,6 +50,7 @@ public class SettingsActivity extends BaseActivity
         Logger.info("Hello World");
 
         settings = new Settings();
+        settings.load(this);
         fps = 24;
 
         bnStart = (Button) findViewById(R.id.bnStart);
@@ -59,7 +59,7 @@ public class SettingsActivity extends BaseActivity
         bnClose = (Button) findViewById(R.id.bnClose);
         bnClose.setOnClickListener(bnCloseOnClickListener);
 
-        tabHost = (TabHost)findViewById(R.id.tabHost);
+        /*tabHost = (TabHost)findViewById(R.id.tabHost);
         tabHost.setup();
 
         //Tab 1
@@ -72,7 +72,7 @@ public class SettingsActivity extends BaseActivity
         spec = tabHost.newTabSpec("Tab Two");
         spec.setContent(R.id.tab2);
         spec.setIndicator("");
-        tabHost.addTab(spec);
+        tabHost.addTab(spec);*/
 
         tvIntervalValue = (TextView) findViewById(R.id.tvIntervalValue);
         tvIntervalUnit = (TextView) findViewById(R.id.tvIntervalUnit);
@@ -80,12 +80,14 @@ public class SettingsActivity extends BaseActivity
         sbInterval = (AdvancedSeekBar) findViewById(R.id.sbInterval);
         sbInterval.setMax(83);
         sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
+        sbInterval.setProgress(settings.rawInterval);
 
         tvShotsValue = (TextView) findViewById(R.id.tvShotsValue);
 
         sbShots = (AdvancedSeekBar) findViewById(R.id.sbShots);
         sbShots.setMax(130);
         sbShots.setOnSeekBarChangeListener(sbShotsOnSeekBarChangeListener);
+        sbShots.setProgress(settings.rawShotCount);
 
         tvDurationValue = (TextView) findViewById(R.id.tvDurationValue);
         tvDurationUnit = (TextView) findViewById(R.id.tvDurationUnit);
@@ -93,16 +95,18 @@ public class SettingsActivity extends BaseActivity
         tvVideoTimeUnit = (TextView) findViewById(R.id.tvVideoTimeUnit);
 
         spnFps = (Spinner) findViewById(R.id.spnFps);
-        spnFps.setSelection(0);
+        spnFps.setSelection(settings.fps);
         spnFps.setOnItemSelectedListener(spnFpsOnItemSelectedListener);
 
         cbSilentShutter = (CheckBox) findViewById(R.id.cbSilentShutter);
+        cbSilentShutter.setChecked(settings.silentShutter);
         cbSilentShutter.setOnCheckedChangeListener(cbSilentShutterOnCheckListener);
     }
 
     View.OnClickListener bnStartOnClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            settings.save(that);
             Intent intent = new Intent(that, ShootActivity.class);
             settings.putInIntent(intent);
             startActivity(intent);
@@ -118,7 +122,7 @@ public class SettingsActivity extends BaseActivity
     SeekBar.OnSeekBarChangeListener sbIntervalOnSeekBarChangeListener
             = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+        public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
             int intervalTextValue = 0;
             String intervalUnit = "";
 
@@ -152,7 +156,7 @@ public class SettingsActivity extends BaseActivity
     },
     sbShotsOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
-        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+        public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
             String shotsText;
 
             i++;
