@@ -116,13 +116,14 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
         final Camera.Parameters params = cameraEx.createEmptyParameters();
         final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(params);
+        modifier.setDriveMode(CameraEx.ParametersModifier.DRIVE_MODE_SINGLE);
         // setSilentShutterMode doesn't exist on all cameras
         try {
             modifier.setSilentShutterMode(settings.silentShutter);
-            cameraEx.getNormalCamera().setParameters(params);
         }
         catch(NoSuchMethodError ignored)
         {}
+        cameraEx.getNormalCamera().setParameters(params);
 
         pictureReviewTime = autoReviewControl.getPictureReviewTime();
         log(Integer.toString(pictureReviewTime));
