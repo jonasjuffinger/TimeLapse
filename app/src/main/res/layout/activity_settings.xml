@@ -1,8 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:id="@+id/lRoot">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,6 +22,7 @@
                 android:id="@+id/lblInterval"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:text="Interval"
                 android:textSize="20sp" />
@@ -68,6 +70,7 @@
                 android:id="@+id/lblShots"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:gravity="center_vertical"
                 android:text="Shots"
                 android:textSize="20sp" />
@@ -84,11 +87,11 @@
 
             <TextView
                 android:id="@+id/tvShotsValue"
-                android:layout_width="60dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="10dp"
+                android:layout_marginRight="30dp"
                 android:gravity="right|center_vertical"
                 android:text="1"
                 android:textSize="20sp" />
@@ -168,6 +171,9 @@
                 android:id="@+id/cbSilentShutter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
                 android:checked="true"
                 android:text="Silent Shutter" />
         </RelativeLayout>
@@ -176,29 +182,29 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="bottom"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true">
+        android:layout_alignParentLeft="true"
+        android:gravity="bottom">
 
         <Button
-            android:text="Close"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
             android:id="@+id/bnClose"
-            android:textSize="20sp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp" />
-
-        <Button
-            android:text="Start"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:id="@+id/bnStart"
-            android:textSize="20sp"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
+            android:layout_marginLeft="10dp"
+            android:text="Close"
+            android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/bnStart"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="10dp" />
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
+            android:text="Start"
+            android:textSize="20sp" />
 
     </RelativeLayout>
 

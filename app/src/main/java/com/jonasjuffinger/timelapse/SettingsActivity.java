@@ -13,6 +13,7 @@ import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.github.ma1co.pmcademo.app.BaseActivity;
+import com.sony.scalar.hardware.CameraEx;
 
 public class SettingsActivity extends BaseActivity
 {
@@ -85,6 +86,16 @@ public class SettingsActivity extends BaseActivity
 
         cbSilentShutter.setChecked(settings.silentShutter);
         cbSilentShutter.setOnCheckedChangeListener(cbSilentShutterOnCheckListener);
+        cbSilentShutter.setVisibility(View.INVISIBLE);
+
+        try {
+            CameraEx cameraEx = CameraEx.open(0, null);
+            final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(cameraEx.getNormalCamera().getParameters());
+            if(modifier.isSupportedSilentShutterMode())
+                cbSilentShutter.setVisibility(View.VISIBLE);
+        }
+        catch(NoSuchMethodError ignored)
+        {}
     }
 
     View.OnClickListener bnStartOnClickListener = new View.OnClickListener() {

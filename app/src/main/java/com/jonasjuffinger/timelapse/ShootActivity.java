@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.github.ma1co.pmcademo.app.BaseActivity;
@@ -24,6 +25,7 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
     private int shotCount;
 
     private TextView tvCount; //, tvInfo;
+    private LinearLayout llEnd;
 
     private SurfaceView reviewSurfaceView;
     private SurfaceHolder cameraSurfaceHolder;
@@ -72,7 +74,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tvCount.setText("FINISHED! press MENU");
+                        tvCount.setText("Thanks for using this app!");
+                        llEnd.setVisibility(View.VISIBLE);
                     }
                 });
             }
@@ -93,7 +96,7 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         takingPicture = false;
 
         tvCount = (TextView) findViewById(R.id.tvCount);
-        //tvInfo = (TextView) findViewById(R.id.tvInfo);
+        llEnd = (LinearLayout) findViewById(R.id.llEnd);
 
         reviewSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         reviewSurfaceView.setZOrderOnTop(false);
