@@ -86,7 +86,7 @@ public class SettingsActivity extends BaseActivity
 
         cbSilentShutter.setChecked(settings.silentShutter);
         cbSilentShutter.setOnCheckedChangeListener(cbSilentShutterOnCheckListener);
-        cbSilentShutter.setVisibility(View.INVISIBLE);
+        //cbSilentShutter.setVisibility(View.INVISIBLE);
 
         //try {
             //CameraEx cameraEx = CameraEx.open(0, null);
