@@ -88,14 +88,14 @@ public class SettingsActivity extends BaseActivity
         cbSilentShutter.setOnCheckedChangeListener(cbSilentShutterOnCheckListener);
         cbSilentShutter.setVisibility(View.INVISIBLE);
 
-        try {
-            CameraEx cameraEx = CameraEx.open(0, null);
-            final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(cameraEx.getNormalCamera().getParameters());
-            if(modifier.isSupportedSilentShutterMode())
-                cbSilentShutter.setVisibility(View.VISIBLE);
-        }
-        catch(NoSuchMethodError ignored)
-        {}
+        //try {
+            //CameraEx cameraEx = CameraEx.open(0, null);
+            //final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(cameraEx.getNormalCamera().getParameters());
+            //if(modifier.isSupportedSilentShutterMode())
+            //    cbSilentShutter.setVisibility(View.VISIBLE);
+        /*}
+        catch(Exception ignored)
+        {}*/
     }
 
     View.OnClickListener bnStartOnClickListener = new View.OnClickListener() {

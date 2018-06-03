@@ -19,13 +19,13 @@ import com.sony.scalar.hardware.CameraEx;
 import java.io.IOException;
 import java.util.List;
 
-public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callback, CameraEx.ShutterListener
+public class ShootActivity extends BaseActivity implements SurfaceHolder.Callback, CameraEx.ShutterListener
 {
     private Settings settings;
 
     private int shotCount;
 
-    private TextView tvCount, tvBattery; //, tvInfo;
+    private TextView tvCount, tvBattery, tvRemaining;;
     private LinearLayout llEnd;
 
     private SurfaceView reviewSurfaceView;
@@ -41,8 +41,6 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
     private long shootTime;
 
     private Display display;
-
-    Intent batteryStatus;
 
     private Handler shootRunnableHandler = new Handler();
     private final Runnable shootRunnable = new Runnable()
@@ -78,6 +76,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
                     @Override
                     public void run() {
                         tvCount.setText("Thanks for using this app!");
+                        tvBattery.setVisibility(View.INVISIBLE);
+                        tvRemaining.setVisibility(View.INVISIBLE);
                         llEnd.setVisibility(View.VISIBLE);
                     }
                 });
@@ -100,15 +100,13 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
         tvCount = (TextView) findViewById(R.id.tvCount);
         tvBattery = (TextView) findViewById(R.id.tvBattery);
+        tvRemaining = (TextView) findViewById(R.id.tvRemaining);
         llEnd = (LinearLayout) findViewById(R.id.llEnd);
 
         reviewSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         reviewSurfaceView.setZOrderOnTop(false);
         cameraSurfaceHolder = reviewSurfaceView.getHolder();
         cameraSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
-
-        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-        batteryStatus = registerReceiver(null, ifilter);
     }
 
 
@@ -148,7 +146,9 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
         setAutoPowerOffMode(false);
 
-        //tvBattery.setText(Integer.toString(getBatteryPercentage()));
+        tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount));
+        tvRemaining.setText("" + Integer.toString((settings.shotCount - shotCount) * settings.interval / 60) + "min");
+        tvBattery.setText(getBatteryPercentage());
     }
 
     @Override
@@ -218,8 +218,9 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvCount.setText(Integer.toString(shotCount));
-                tvBattery.setText(Integer.toString(getBatteryPercentage()));
+                tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount));
+                tvRemaining.setText("" + Integer.toString((settings.shotCount - shotCount) * settings.interval / 60) + "min");
+                tvBattery.setText(getBatteryPercentage());
             }
         });
     }
@@ -258,12 +259,26 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         }
     }
 
-    private int getBatteryPercentage()
+    private String getBatteryPercentage()
     {
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        Intent batteryStatus = registerReceiver(null, ifilter);
+
         int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
 
-        return (int) (level / (float)scale * 100);
+        int status = batteryStatus.getIntExtra(BatteryManager.EXTRA_STATUS, -1);
+        int chargePlug = batteryStatus.getIntExtra(BatteryManager.EXTRA_PLUGGED, -1);
+        boolean isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
+                             status == BatteryManager.BATTERY_STATUS_FULL ||
+                             chargePlug == BatteryManager.BATTERY_PLUGGED_USB ||
+                             chargePlug == BatteryManager.BATTERY_PLUGGED_AC;
+
+        String s = "";
+        if(isCharging)
+            s = "c ";
+
+        return s + (int)(level / (float)scale * 100) + "%";
     }
 
     @Override
