@@ -1,7 +1,9 @@
 package com.jonasjuffinger.timelapse;
 
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.hardware.Camera;
+import android.os.BatteryManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.SurfaceHolder;
@@ -13,7 +15,6 @@ import android.widget.TextView;
 import com.github.ma1co.pmcademo.app.BaseActivity;
 
 import com.sony.scalar.hardware.CameraEx;
-import com.sony.scalar.hardware.avio.DisplayManager;
 
 import java.io.IOException;
 import java.util.List;
@@ -24,7 +25,7 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
 
     private int shotCount;
 
-    private TextView tvCount; //, tvInfo;
+    private TextView tvCount, tvBattery; //, tvInfo;
     private LinearLayout llEnd;
 
     private SurfaceView reviewSurfaceView;
@@ -40,6 +41,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
     private long shootTime;
 
     private Display display;
+
+    Intent batteryStatus;
 
     private Handler shootRunnableHandler = new Handler();
     private final Runnable shootRunnable = new Runnable()
@@ -96,12 +99,16 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         takingPicture = false;
 
         tvCount = (TextView) findViewById(R.id.tvCount);
+        tvBattery = (TextView) findViewById(R.id.tvBattery);
         llEnd = (LinearLayout) findViewById(R.id.llEnd);
 
         reviewSurfaceView = (SurfaceView) findViewById(R.id.surfaceView);
         reviewSurfaceView.setZOrderOnTop(false);
         cameraSurfaceHolder = reviewSurfaceView.getHolder();
         cameraSurfaceHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
+
+        IntentFilter ifilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+        batteryStatus = registerReceiver(null, ifilter);
     }
 
 
@@ -140,6 +147,8 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
         }
 
         setAutoPowerOffMode(false);
+
+        //tvBattery.setText(Integer.toString(getBatteryPercentage()));
     }
 
     @Override
@@ -210,6 +219,7 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
             @Override
             public void run() {
                 tvCount.setText(Integer.toString(shotCount));
+                tvBattery.setText(Integer.toString(getBatteryPercentage()));
             }
         });
     }
@@ -246,6 +256,14 @@ public class ShootActivity  extends BaseActivity implements SurfaceHolder.Callba
             stopPicturePreview = true;
             shootRunnableHandler.postDelayed(shootRunnable, pictureReviewTime * 1000);
         }
+    }
+
+    private int getBatteryPercentage()
+    {
+        int level = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+        int scale = batteryStatus.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
+
+        return (int) (level / (float)scale * 100);
     }
 
     @Override
