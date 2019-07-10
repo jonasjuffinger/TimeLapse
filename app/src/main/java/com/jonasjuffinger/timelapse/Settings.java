@@ -15,11 +15,13 @@ class Settings {
     private static final String EXTRA_SHOTCOUNT = "com.jonasjuffinger.timelapse.SHOTCOUNT";
     private static final String EXTRA_DISPLAYOFF = "com.jonasjuffinger.timelapse.DISPLAYOFF";
     private static final String EXTRA_SILENTSHUTTER = "com.jonasjuffinger.timelapse.SILENTSHUTTER";
+    private static final String EXTRA_AEL = "com.jonasjuffinger.timelapse.AEL";
 
     int interval, rawInterval;
     int shotCount, rawShotCount;
     boolean displayOff;
     boolean silentShutter;
+    boolean ael;
     int fps;    // index
 
     Settings() {
@@ -29,14 +31,16 @@ class Settings {
         rawShotCount = 1;
         displayOff = false;
         silentShutter = true;
+        ael = true;
         fps = 0;
     }
 
-    public Settings(int interval, int shotCount, boolean displayOff, boolean silentShutter) {
+    public Settings(int interval, int shotCount, boolean displayOff, boolean silentShutter, boolean ael) {
         this.interval = interval;
         this.shotCount = shotCount;
         this.displayOff = displayOff;
         this.silentShutter = silentShutter;
+        this.ael = ael;
     }
 
     void putInIntent(Intent intent) {
@@ -44,6 +48,7 @@ class Settings {
         intent.putExtra(EXTRA_SHOTCOUNT, shotCount);
         intent.putExtra(EXTRA_DISPLAYOFF, displayOff);
         intent.putExtra(EXTRA_SILENTSHUTTER, silentShutter);
+        intent.putExtra(EXTRA_AEL, ael);
     }
 
     static Settings getFromIntent(Intent intent) {
@@ -51,7 +56,8 @@ class Settings {
                 intent.getIntExtra(EXTRA_INTERVAL, 1),
                 intent.getIntExtra(EXTRA_SHOTCOUNT, 1),
                 intent.getBooleanExtra(EXTRA_DISPLAYOFF, false),
-                intent.getBooleanExtra(EXTRA_SILENTSHUTTER, false)
+                intent.getBooleanExtra(EXTRA_SILENTSHUTTER, false),
+                intent.getBooleanExtra(EXTRA_AEL, false)
         );
     }
 
@@ -62,6 +68,7 @@ class Settings {
         editor.putInt("interval", rawInterval);
         editor.putInt("shotCount", rawShotCount);
         editor.putBoolean("silentShutter", silentShutter);
+        editor.putBoolean("ael", ael);
         editor.putInt("fps", fps);
         editor.apply();
     }
@@ -72,6 +79,7 @@ class Settings {
         rawInterval = sharedPref.getInt("interval", rawInterval);
         rawShotCount = sharedPref.getInt("shotCount", rawShotCount);
         silentShutter = sharedPref.getBoolean("silentShutter", silentShutter);
+        ael = sharedPref.getBoolean("ael", ael);
         fps = sharedPref.getInt("fps", fps);
     }
 }

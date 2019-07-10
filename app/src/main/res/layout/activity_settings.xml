@@ -176,6 +176,16 @@
                 android:layout_marginLeft="10dp"
                 android:checked="true"
                 android:text="Silent Shutter" />
+
+            <CheckBox
+                    android:id="@+id/cbAEL"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:checked="true"
+                    android:layout_toRightOf="@id/cbSilentShutter"
+                    android:text="AEL" />
         </RelativeLayout>
     </LinearLayout>
 
