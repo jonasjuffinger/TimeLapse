@@ -122,7 +122,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         //autoReviewControl.setPictureReviewInfoHist(true);
         cameraEx.setAutoPictureReviewControl(autoReviewControl);
 
-        final Camera.Parameters params = cameraEx.createEmptyParameters();
+        final Camera.Parameters params = cameraEx.getNormalCamera().getParameters();
         final CameraEx.ParametersModifier modifier = cameraEx.createParametersModifier(params);
         modifier.setDriveMode(CameraEx.ParametersModifier.DRIVE_MODE_SINGLE);
         // setSilentShutterMode doesn't exist on all cameras
@@ -131,6 +131,17 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         }
         catch(NoSuchMethodError ignored)
         {}
+
+        try{
+            //add also AEL if set
+            if(settings.ael) {
+                modifier.setAutoExposureLock(CameraEx.ParametersModifier.AE_LOCK_ON);
+            }
+        }
+        catch (Exception e){
+            //do nothing
+        }
+
         cameraEx.getNormalCamera().setParameters(params);
 
         pictureReviewTime = autoReviewControl.getPictureReviewTime();
