@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import static android.preference.PreferenceManager.getDefaultSharedPreferences;
 
 /**
@@ -16,6 +18,7 @@ class Settings {
     private static final String EXTRA_DISPLAYOFF = "com.jonasjuffinger.timelapse.DISPLAYOFF";
     private static final String EXTRA_SILENTSHUTTER = "com.jonasjuffinger.timelapse.SILENTSHUTTER";
     private static final String EXTRA_AEL = "com.jonasjuffinger.timelapse.AEL";
+    private static final String EXTRA_BRS = "com.jonasjuffinger.timelapse.BRS";
 
     int interval, rawInterval;
     int shotCount, rawShotCount;
@@ -23,6 +26,7 @@ class Settings {
     boolean silentShutter;
     boolean ael;
     int fps;    // index
+    boolean brs;
 
     Settings() {
         interval = 1;
@@ -33,14 +37,16 @@ class Settings {
         silentShutter = true;
         ael = true;
         fps = 0;
+        brs = true;
     }
 
-    public Settings(int interval, int shotCount, boolean displayOff, boolean silentShutter, boolean ael) {
+    public Settings(int interval, int shotCount, boolean displayOff, boolean silentShutter, boolean ael, boolean brs) {
         this.interval = interval;
         this.shotCount = shotCount;
         this.displayOff = displayOff;
         this.silentShutter = silentShutter;
         this.ael = ael;
+        this.brs = brs;
     }
 
     void putInIntent(Intent intent) {
@@ -49,6 +55,7 @@ class Settings {
         intent.putExtra(EXTRA_DISPLAYOFF, displayOff);
         intent.putExtra(EXTRA_SILENTSHUTTER, silentShutter);
         intent.putExtra(EXTRA_AEL, ael);
+        intent.putExtra(EXTRA_BRS, brs);
     }
 
     static Settings getFromIntent(Intent intent) {
@@ -57,7 +64,8 @@ class Settings {
                 intent.getIntExtra(EXTRA_SHOTCOUNT, 1),
                 intent.getBooleanExtra(EXTRA_DISPLAYOFF, false),
                 intent.getBooleanExtra(EXTRA_SILENTSHUTTER, false),
-                intent.getBooleanExtra(EXTRA_AEL, false)
+                intent.getBooleanExtra(EXTRA_AEL, false),
+                intent.getBooleanExtra(EXTRA_BRS, false)
         );
     }
 
@@ -70,6 +78,7 @@ class Settings {
         editor.putBoolean("silentShutter", silentShutter);
         editor.putBoolean("ael", ael);
         editor.putInt("fps", fps);
+        editor.putBoolean("brs", brs);
         editor.apply();
     }
 
@@ -81,5 +90,6 @@ class Settings {
         silentShutter = sharedPref.getBoolean("silentShutter", silentShutter);
         ael = sharedPref.getBoolean("ael", ael);
         fps = sharedPref.getInt("fps", fps);
+        brs = sharedPref.getBoolean("brs", brs);
     }
 }
