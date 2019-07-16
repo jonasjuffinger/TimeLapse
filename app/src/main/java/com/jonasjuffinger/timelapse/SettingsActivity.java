@@ -39,6 +39,7 @@ public class SettingsActivity extends BaseActivity
 
     private CheckBox cbSilentShutter;
     private CheckBox cbAEL;
+    private CheckBox cbBRS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -72,8 +73,10 @@ public class SettingsActivity extends BaseActivity
         tvShotsValue = (TextView) findViewById(R.id.tvShotsValue);
         sbShots = (AdvancedSeekBar) findViewById(R.id.sbShots);
         spnFps = (Spinner) findViewById(R.id.spnFps);
+
         cbSilentShutter = (CheckBox) findViewById(R.id.cbSilentShutter);
         cbAEL = (CheckBox) findViewById(R.id.cbAEL);
+        cbBRS = (CheckBox) findViewById(R.id.cbBRC);
 
         sbInterval.setMax(83);
         sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
@@ -92,6 +95,9 @@ public class SettingsActivity extends BaseActivity
 
         cbAEL.setChecked(settings.ael);
         cbAEL.setOnCheckedChangeListener(cbAELOnCheckListener);
+
+        cbBRS.setChecked(settings.brs);
+        cbBRS.setOnCheckedChangeListener(cbBRSOnCheckListener);
 
         //try {
             //CameraEx cameraEx = CameraEx.open(0, null);
@@ -223,6 +229,13 @@ public class SettingsActivity extends BaseActivity
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             settings.ael = b;
+        }
+    };
+
+    CheckBox.OnCheckedChangeListener cbBRSOnCheckListener = new CheckBox.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            settings.brs = b;
         }
     };
 

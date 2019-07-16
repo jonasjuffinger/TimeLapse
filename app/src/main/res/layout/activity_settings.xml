@@ -186,6 +186,16 @@
                     android:checked="true"
                     android:layout_toRightOf="@id/cbSilentShutter"
                     android:text="AEL" />
+
+            <CheckBox
+                    android:id="@+id/cbBRC"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="10dp"
+                    android:checked="true"
+                    android:layout_toRightOf="@id/cbAEL"
+                    android:text="BRC3" />
         </RelativeLayout>
     </LinearLayout>
 

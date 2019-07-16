@@ -18,6 +18,7 @@ import com.sony.scalar.hardware.CameraEx;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class ShootActivity extends BaseActivity implements SurfaceHolder.Callback, CameraEx.ShutterListener
 {
@@ -42,6 +43,13 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
 
     private Display display;
 
+    int getcnt(){
+        if(settings.brs){
+            return 3;
+        }
+        return 1;
+    }
+
     private Handler shootRunnableHandler = new Handler();
     private final Runnable shootRunnable = new Runnable()
     {
@@ -55,12 +63,16 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
                 //display.off();
             }
 
-            if(shotCount < settings.shotCount) {
+            if(shotCount < settings.shotCount * getcnt()) {
                 long remainingTime = shootTime + settings.interval * 1000 - System.currentTimeMillis();
+                if(brck.get()>0){
+                    remainingTime = -1;
+                }
 
                 log("  Remaining Time: " + Long.toString(remainingTime));
 
                 if (remainingTime <= 150) { // 300ms is vaguely the time this postDelayed is to slow
+                    brck.getAndDecrement();
                     shoot();
                     if(!settings.displayOff) {
                         log(Boolean.toString(settings.displayOff));
@@ -142,6 +154,19 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
             //do nothing
         }
 
+        if(settings.brs){
+            try{
+                modifier.setDriveMode(CameraEx.ParametersModifier.DRIVE_MODE_BRACKET);
+                modifier.setBracketMode(CameraEx.ParametersModifier.BRACKET_MODE_EXPOSURE);
+                modifier.setExposureBracketMode(CameraEx.ParametersModifier.EXPOSURE_BRACKET_MODE_SINGLE);
+                modifier.setExposureBracketPeriod(30);
+                modifier.setNumOfBracketPicture(3);
+            }
+            catch (Exception e){
+                //do nothing
+            }
+        }
+
         cameraEx.getNormalCamera().setParameters(params);
 
         pictureReviewTime = autoReviewControl.getPictureReviewTime();
@@ -157,8 +182,8 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
 
         setAutoPowerOffMode(false);
 
-        tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount));
-        tvRemaining.setText("" + Integer.toString((settings.shotCount - shotCount) * settings.interval / 60) + "min");
+        tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount * getcnt()));
+        tvRemaining.setText("" + Integer.toString((settings.shotCount * getcnt() - shotCount) * settings.interval / 60) + "min");
         tvBattery.setText(getBatteryPercentage());
     }
 
@@ -215,7 +240,6 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         catch (IOException e) {}
     }
 
-
     private void shoot() {
         if(takingPicture)
             return;
@@ -229,24 +253,36 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount));
-                tvRemaining.setText("" + Integer.toString((settings.shotCount - shotCount) * settings.interval / 60) + "min");
+                tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount * getcnt()));
+                tvRemaining.setText("" + Integer.toString((settings.shotCount * getcnt() - shotCount) * settings.interval / 60) + "min");
                 tvBattery.setText(getBatteryPercentage());
             }
         });
     }
 
+    private AtomicInteger brck = new AtomicInteger(0);
 
     @Override
     public void onShutter(int i, CameraEx cameraEx) {
+
+        if(brck.get()<0){
+            brck = new AtomicInteger(0);
+            if(getcnt()>1) {
+                brck = new AtomicInteger(2);
+            }
+        }
+
         this.cameraEx.cancelTakePicture();
 
         camera.startPreview();
 
-        if(shotCount < settings.shotCount) {
+        if(shotCount < settings.shotCount * getcnt()) {
 
             // remaining time to the next shot
             long remainingTime = shootTime + settings.interval * 1000 - System.currentTimeMillis();
+            if(brck.get()>0){
+                remainingTime = -1;
+            }
 
             log("Remaining Time: " + Long.toString(remainingTime));
 
