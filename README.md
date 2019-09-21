@@ -17,7 +17,17 @@ Finally click the start button and wait.
 
 You can stop by clicking the MENU button on the camera.
 
+## Silent Shutter ##
 The silent shutter option is functionless on cameras without silent shutter mode.
+
+## AEL ##
+This locks the exposure to the exposure of the first shot.
+
+## BRC3 ##
+The app supports exposure bracketing. Set the mode to three-image exposure bracketing outside of the app and check BRC3 checkbox in the app. The app will always take three pictures. Keep in mind that the interval time must be large enough to take all three pictures.
+
+## Burst mode ##
+When selecting the lowest interval the camera is in burst mode. In this mode it takes pictures as fast as it can write to the SD card for the duration set by the second slider.
 
 ## Known Issues ##
 
