@@ -20,7 +20,8 @@ class Settings {
     private static final String EXTRA_AEL = "com.jonasjuffinger.timelapse.AEL";
     private static final String EXTRA_BRS = "com.jonasjuffinger.timelapse.BRS";
 
-    int interval, rawInterval;
+    double interval;
+    int rawInterval;
     int shotCount, rawShotCount;
     boolean displayOff;
     boolean silentShutter;

@@ -30,7 +30,7 @@
             <view
                 android:id="@+id/sbInterval"
                 class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
-                android:layout_width="0dp"
+                android:layout_width="240dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="10dp"
@@ -42,21 +42,21 @@
                 android:id="@+id/tvIntervalUnit"
                 android:layout_width="40dp"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
                 android:gravity="center_vertical"
-                android:text="s"
+                android:text="min"
                 android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/tvIntervalValue"
-                android:layout_width="25dp"
+                android:layout_width="40dp"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginRight="5dp"
                 android:layout_toLeftOf="@+id/tvIntervalUnit"
                 android:gravity="right|center_vertical"
-                android:text="1"
+                android:text="10.5"
                 android:textSize="20sp" />
         </RelativeLayout>
 
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="30dp"
+                android:layout_marginRight="45dp"
                 android:gravity="right|center_vertical"
                 android:text="1"
                 android:textSize="20sp" />
@@ -183,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="10dp"
-                    android:checked="true"
+                    android:checked="false"
                     android:layout_toRightOf="@id/cbSilentShutter"
                     android:text="AEL" />
 
@@ -193,7 +193,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_marginLeft="10dp"
-                    android:checked="true"
+                    android:checked="false"
                     android:layout_toRightOf="@id/cbAEL"
                     android:text="BRC3" />
         </RelativeLayout>

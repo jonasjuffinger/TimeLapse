@@ -15,6 +15,8 @@ import android.widget.TextView;
 import com.github.ma1co.pmcademo.app.BaseActivity;
 import com.sony.scalar.hardware.CameraEx;
 
+import org.w3c.dom.Text;
+
 public class SettingsActivity extends BaseActivity
 {
     private SettingsActivity that = this;
@@ -30,6 +32,7 @@ public class SettingsActivity extends BaseActivity
 
     private AdvancedSeekBar sbShots;
     private TextView tvShotsValue;
+    private TextView lblShots;
 
     private TextView tvDurationValue, tvDurationUnit;
     private TextView tvVideoTimeValue, tvVideoTimeUnit;
@@ -72,13 +75,14 @@ public class SettingsActivity extends BaseActivity
         sbInterval = (AdvancedSeekBar) findViewById(R.id.sbInterval);
         tvShotsValue = (TextView) findViewById(R.id.tvShotsValue);
         sbShots = (AdvancedSeekBar) findViewById(R.id.sbShots);
+        lblShots = (TextView) findViewById(R.id.lblShots);
         spnFps = (Spinner) findViewById(R.id.spnFps);
 
         cbSilentShutter = (CheckBox) findViewById(R.id.cbSilentShutter);
         cbAEL = (CheckBox) findViewById(R.id.cbAEL);
         cbBRS = (CheckBox) findViewById(R.id.cbBRC);
 
-        sbInterval.setMax(83);
+        sbInterval.setMax(119);
         sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
         sbInterval.setProgress(settings.rawInterval);
 
@@ -130,31 +134,52 @@ public class SettingsActivity extends BaseActivity
             = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
-            int intervalTextValue = 0;
+            String intervalTextValue = "";
             String intervalUnit = "";
 
             settings.rawInterval = i;
 
             i++;
 
-            if(i <= 40) {
-                settings.interval = i;
-                intervalTextValue = settings.interval;
+            if (i == 1) {
+                settings.interval = 0;
+                intervalTextValue = "burst";
+                intervalUnit = "";
+            }
+            else if(i < 41) {
+                settings.interval = i * 0.5;
+                intervalTextValue = Double.toString(settings.interval);
+                intervalUnit = "s";
+
+            }
+            else if(i < 60) {
+                settings.interval = (i-40) + 20;
+                intervalTextValue = Double.toString(settings.interval);
                 intervalUnit = "s";
             }
-            else if(i <= 56) {
-                settings.interval = (i-40) * 5 + 40;
-                intervalTextValue = settings.interval;
+            else if(i < 76) {
+                settings.interval = (i-60) * 5 + 40;
+                intervalTextValue = Double.toString(settings.interval);
                 intervalUnit = "s";
             }
-            else if(i <= 84) {
-                settings.interval = (i-54) * 60;
-                intervalTextValue = (i-54);
+            else if(i < 93) {
+                settings.interval = (i-76) * 30 + 120;
+                intervalTextValue = Double.toString((i-76) * 0.5 + 2);
                 intervalUnit = "min";
             }
-
-            tvIntervalValue.setText(Integer.toString(intervalTextValue));
+            else if(i < 120) {
+                settings.interval = (i-93) * 60 + 660;
+                intervalTextValue = Integer.toString(i-93+11);
+                intervalUnit = "min";
+            }
+            tvIntervalValue.setText(intervalTextValue);
             tvIntervalUnit.setText(intervalUnit);
+
+            if(settings.interval == 0)
+                lblShots.setText("Dur. (s)");
+            else
+                lblShots.setText("Shots");
+
             updateTimes();
         }
 
@@ -249,8 +274,16 @@ public class SettingsActivity extends BaseActivity
             return;
         }
 
-        int duration = settings.interval * settings.shotCount;
-        int videoTime = settings.shotCount / fps;
+        int duration = 0;
+        int videoTime = 0;
+        if(settings.interval == 0) {
+            duration = settings.shotCount;
+            videoTime = -1;
+        }
+        else {
+            duration = (int) Math.round(settings.interval * settings.shotCount);
+            videoTime = settings.shotCount / fps;
+        }
 
         if(duration < 60) {
             tvDurationValue.setText("" + duration);
@@ -261,7 +294,11 @@ public class SettingsActivity extends BaseActivity
             tvDurationUnit.setText("min");
         }
 
-        if(videoTime < 120) {
+        if(videoTime == -1) {
+            tvVideoTimeValue.setText("");
+            tvVideoTimeUnit.setText("");
+        }
+        else if(videoTime < 120) {
             tvVideoTimeValue.setText("" + videoTime);
             tvVideoTimeUnit.setText("s");
         }

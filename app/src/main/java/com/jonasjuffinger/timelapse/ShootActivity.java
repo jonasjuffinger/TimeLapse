@@ -36,12 +36,15 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
     private CameraEx.AutoPictureReviewControl autoReviewControl;
     private int pictureReviewTime;
 
+    private boolean burstShooting;
     private boolean stopPicturePreview;
     private boolean takingPicture;
 
     private long shootTime;
 
     private Display display;
+
+    static private final boolean SHOW_END_SCREEN = true;
 
     int getcnt(){
         if(settings.brs){
@@ -64,7 +67,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
             }
 
             if(shotCount < settings.shotCount * getcnt()) {
-                long remainingTime = shootTime + settings.interval * 1000 - System.currentTimeMillis();
+                long remainingTime = Math.round(shootTime + settings.interval * 1000 - System.currentTimeMillis());
                 if(brck.get()>0){
                     remainingTime = -1;
                 }
@@ -87,10 +90,15 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tvCount.setText("Thanks for using this app!");
-                        tvBattery.setVisibility(View.INVISIBLE);
-                        tvRemaining.setVisibility(View.INVISIBLE);
-                        llEnd.setVisibility(View.VISIBLE);
+                        if(SHOW_END_SCREEN) {
+                            tvCount.setText("Thanks for using this app!");
+                            tvBattery.setVisibility(View.INVISIBLE);
+                            tvRemaining.setVisibility(View.INVISIBLE);
+                            llEnd.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            onBackPressed();
+                        }
                     }
                 });
             }
@@ -109,6 +117,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
 
         shotCount = 0;
         takingPicture = false;
+        burstShooting = settings.interval == 0;
 
         tvCount = (TextView) findViewById(R.id.tvCount);
         tvBattery = (TextView) findViewById(R.id.tvBattery);
@@ -172,7 +181,8 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         pictureReviewTime = autoReviewControl.getPictureReviewTime();
         log(Integer.toString(pictureReviewTime));
 
-        shootRunnableHandler.postDelayed(shootRunnable, settings.interval * 1000);
+
+        shootRunnableHandler.postDelayed(shootRunnable, 1000);
 
         display = new Display(getDisplayManager());
 
@@ -183,7 +193,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         setAutoPowerOffMode(false);
 
         tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount * getcnt()));
-        tvRemaining.setText("" + Integer.toString((settings.shotCount * getcnt() - shotCount) * settings.interval / 60) + "min");
+        tvRemaining.setText(getRemainingTime());
         tvBattery.setText(getBatteryPercentage());
     }
 
@@ -254,7 +264,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
             @Override
             public void run() {
                 tvCount.setText(Integer.toString(shotCount)+"/"+Integer.toString(settings.shotCount * getcnt()));
-                tvRemaining.setText("" + Integer.toString((settings.shotCount * getcnt() - shotCount) * settings.interval / 60) + "min");
+                tvRemaining.setText(getRemainingTime());
                 tvBattery.setText(getBatteryPercentage());
             }
         });
@@ -272,37 +282,50 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
             }
         }
 
-        this.cameraEx.cancelTakePicture();
+        if(burstShooting) {
+            // just keep shooting
+            this.cameraEx.cancelTakePicture();
 
-        camera.startPreview();
-
-        if(shotCount < settings.shotCount * getcnt()) {
-
-            // remaining time to the next shot
-            long remainingTime = shootTime + settings.interval * 1000 - System.currentTimeMillis();
-            if(brck.get()>0){
-                remainingTime = -1;
-            }
-
-            log("Remaining Time: " + Long.toString(remainingTime));
-
-            // if the remaining time is negative immediately take the next picture
-            if (remainingTime < 0) {
-                stopPicturePreview = false;
-                shootRunnableHandler.post(shootRunnable);
-            }
-            // show the preview picture for some time
-            else {
-                long previewPictureShowTime = Math.min(remainingTime, pictureReviewTime * 1000);
-                log("  Stop preview in: " + Long.toString(previewPictureShowTime));
-                reviewSurfaceView.setVisibility(View.VISIBLE);
+            if (shootTime >= settings.shotCount * 1000) {
+                this.cameraEx.cancelTakePicture();
                 stopPicturePreview = true;
-                shootRunnableHandler.postDelayed(shootRunnable, previewPictureShowTime);
+                shootRunnableHandler.postDelayed(shootRunnable, pictureReviewTime * 1000);
             }
+            else
+                shoot();
         }
         else {
-            stopPicturePreview = true;
-            shootRunnableHandler.postDelayed(shootRunnable, pictureReviewTime * 1000);
+            this.cameraEx.cancelTakePicture();
+
+            camera.startPreview();
+
+            if (shotCount < settings.shotCount * getcnt()) {
+
+                // remaining time to the next shot
+                double remainingTime = shootTime + settings.interval * 1000 - System.currentTimeMillis();
+                if (brck.get() > 0) {
+                    remainingTime = -1;
+                }
+
+                log("Remaining Time: " + remainingTime);
+
+                // if the remaining time is negative immediately take the next picture
+                if (remainingTime < 0) {
+                    stopPicturePreview = false;
+                    shootRunnableHandler.post(shootRunnable);
+                }
+                // show the preview picture for some time
+                else {
+                    long previewPictureShowTime = Math.round(Math.min(remainingTime, pictureReviewTime * 1000));
+                    log("  Stop preview in: " + previewPictureShowTime);
+                    reviewSurfaceView.setVisibility(View.VISIBLE);
+                    stopPicturePreview = true;
+                    shootRunnableHandler.postDelayed(shootRunnable, previewPictureShowTime);
+                }
+            } else {
+                stopPicturePreview = true;
+                shootRunnableHandler.postDelayed(shootRunnable, pictureReviewTime * 1000);
+            }
         }
     }
 
@@ -326,6 +349,13 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
             s = "c ";
 
         return s + (int)(level / (float)scale * 100) + "%";
+    }
+
+    private String getRemainingTime() {
+        if(burstShooting)
+            return "" + Math.round(settings.shotCount - shootTime / 1000) + "s";
+        else
+            return "" + Math.round((settings.shotCount * getcnt() - shotCount) * settings.interval / 60) + "min";
     }
 
     @Override
