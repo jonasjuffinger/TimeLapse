@@ -26,7 +26,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
 
     private int shotCount;
 
-    private TextView tvCount, tvBattery, tvRemaining;;
+    private TextView tvCount, tvBattery, tvRemaining;
     private LinearLayout llEnd;
 
     private SurfaceView reviewSurfaceView;

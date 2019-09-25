@@ -41,7 +41,7 @@ class Settings {
         brs = true;
     }
 
-    public Settings(int interval, int shotCount, boolean displayOff, boolean silentShutter, boolean ael, boolean brs) {
+    public Settings(double interval, int shotCount, boolean displayOff, boolean silentShutter, boolean ael, boolean brs) {
         this.interval = interval;
         this.shotCount = shotCount;
         this.displayOff = displayOff;
@@ -61,7 +61,7 @@ class Settings {
 
     static Settings getFromIntent(Intent intent) {
         return new Settings(
-                intent.getIntExtra(EXTRA_INTERVAL, 1),
+                intent.getDoubleExtra(EXTRA_INTERVAL, 1),
                 intent.getIntExtra(EXTRA_SHOTCOUNT, 1),
                 intent.getBooleanExtra(EXTRA_DISPLAYOFF, false),
                 intent.getBooleanExtra(EXTRA_SILENTSHUTTER, false),

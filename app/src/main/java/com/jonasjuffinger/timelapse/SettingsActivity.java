@@ -85,10 +85,12 @@ public class SettingsActivity extends BaseActivity
         sbInterval.setMax(119);
         sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
         sbInterval.setProgress(settings.rawInterval);
+        sbIntervalOnSeekBarChangeListener.onProgressChanged(sbInterval, settings.rawInterval, false);
 
         sbShots.setMax(130);
         sbShots.setOnSeekBarChangeListener(sbShotsOnSeekBarChangeListener);
         sbShots.setProgress(settings.rawShotCount);
+        sbShotsOnSeekBarChangeListener.onProgressChanged(sbShots, settings.rawShotCount, false);
 
         spnFps.setSelection(settings.fps);
         spnFps.setOnItemSelectedListener(spnFpsOnItemSelectedListener);
