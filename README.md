@@ -33,5 +33,5 @@ When selecting the lowest interval the camera is in burst mode. In this mode it 
 
 If the app crashes the camera, please try the following camera settings. They were reported to work with the RX100 M4.
  - The silent shutter needs to be disabled or unchecked in the app, on some cameras
- - The app will not run if you are set or self time or continous shooting - Only Single shoot will work.
- - Long exposure noise reduction should be turned off if the interval should less than double the shutter speed.
+ - If it doesn't work in single shoot mode, please try continous shooting. It worked for some people.
+ - Long exposure noise reduction should be turned off if the interval is less than double the shutter speed.
