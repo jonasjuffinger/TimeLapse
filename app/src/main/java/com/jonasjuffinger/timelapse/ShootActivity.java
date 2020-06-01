@@ -40,6 +40,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
     private boolean stopPicturePreview;
     private boolean takingPicture;
 
+    private long delayUntilTime;
     private long shootTime;
 
     private Display display;
@@ -66,7 +67,23 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
                 //display.off();
             }
 
-            if(shotCount < settings.shotCount * getcnt()) {
+            if(System.currentTimeMillis() < delayUntilTime) {
+
+                long secondsRemaining = ((delayUntilTime - System.currentTimeMillis()) / 1000);
+                int hours = (int) secondsRemaining / 3600;
+                int remainder = (int) secondsRemaining - hours * 3600;
+                int minutes = remainder / 60;
+                remainder = remainder - minutes * 60;
+                int seconds = remainder;
+
+                tvRemaining.setVisibility(View.INVISIBLE);
+                tvCount.setText("Delay: " + hours + "h " + minutes + "m " + seconds + "s");
+
+                shootRunnableHandler.postDelayed(this, 1000);
+
+            } else if(shotCount < settings.shotCount * getcnt()) {
+                tvRemaining.setVisibility(View.VISIBLE);
+
                 long remainingTime = Math.round(shootTime + settings.interval * 1000 - System.currentTimeMillis());
                 if(brck.get()>0){
                     remainingTime = -1;
@@ -181,6 +198,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         pictureReviewTime = autoReviewControl.getPictureReviewTime();
         log(Integer.toString(pictureReviewTime));
 
+        delayUntilTime = System.currentTimeMillis() + settings.delay;
 
         shootRunnableHandler.postDelayed(shootRunnable, 1000);
 

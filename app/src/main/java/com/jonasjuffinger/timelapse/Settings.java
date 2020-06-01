@@ -13,6 +13,7 @@ import static android.preference.PreferenceManager.getDefaultSharedPreferences;
  */
 
 class Settings {
+    private static final String EXTRA_DELAY = "com.jonasjuffinger.timelapse.DELAY";
     private static final String EXTRA_INTERVAL = "com.jonasjuffinger.timelapse.INTERVAL";
     private static final String EXTRA_SHOTCOUNT = "com.jonasjuffinger.timelapse.SHOTCOUNT";
     private static final String EXTRA_DISPLAYOFF = "com.jonasjuffinger.timelapse.DISPLAYOFF";
@@ -20,6 +21,7 @@ class Settings {
     private static final String EXTRA_AEL = "com.jonasjuffinger.timelapse.AEL";
     private static final String EXTRA_BRS = "com.jonasjuffinger.timelapse.BRS";
 
+    int delay, rawDelay;
     double interval;
     int rawInterval;
     int shotCount, rawShotCount;
@@ -30,6 +32,8 @@ class Settings {
     boolean brs;
 
     Settings() {
+        delay = 0;
+        rawDelay = 0;
         interval = 1;
         rawInterval = 1;
         shotCount = 1;
@@ -41,7 +45,8 @@ class Settings {
         brs = true;
     }
 
-    public Settings(double interval, int shotCount, boolean displayOff, boolean silentShutter, boolean ael, boolean brs) {
+    public Settings(int delay, double interval, int shotCount, boolean displayOff, boolean silentShutter, boolean ael, boolean brs) {
+        this.delay = delay;
         this.interval = interval;
         this.shotCount = shotCount;
         this.displayOff = displayOff;
@@ -51,6 +56,7 @@ class Settings {
     }
 
     void putInIntent(Intent intent) {
+        intent.putExtra(EXTRA_DELAY, delay);
         intent.putExtra(EXTRA_INTERVAL, interval);
         intent.putExtra(EXTRA_SHOTCOUNT, shotCount);
         intent.putExtra(EXTRA_DISPLAYOFF, displayOff);
@@ -61,6 +67,7 @@ class Settings {
 
     static Settings getFromIntent(Intent intent) {
         return new Settings(
+                intent.getIntExtra(EXTRA_DELAY, 0),
                 intent.getDoubleExtra(EXTRA_INTERVAL, 1),
                 intent.getIntExtra(EXTRA_SHOTCOUNT, 1),
                 intent.getBooleanExtra(EXTRA_DISPLAYOFF, false),
@@ -74,6 +81,7 @@ class Settings {
     {
         SharedPreferences sharedPref = getDefaultSharedPreferences(context);
         SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt("delay", rawDelay);
         editor.putInt("interval", rawInterval);
         editor.putInt("shotCount", rawShotCount);
         editor.putBoolean("silentShutter", silentShutter);
@@ -86,6 +94,7 @@ class Settings {
     void load(Context context)
     {
         SharedPreferences sharedPref = getDefaultSharedPreferences(context);
+        rawDelay = sharedPref.getInt("delay", rawDelay);
         rawInterval = sharedPref.getInt("interval", rawInterval);
         rawShotCount = sharedPref.getInt("shotCount", rawShotCount);
         silentShutter = sharedPref.getBoolean("silentShutter", silentShutter);

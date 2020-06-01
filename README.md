@@ -11,7 +11,7 @@ Thanks to [ma1co](https://github.com/ma1co) for creating this amazing framework 
 ## Usage ##
 The app is easy to use. It doesn't have any controls for shutter speed, aperture, ISO, picture quality etc. Adjust all this settings before starting the app, it will use them. If you don't want the camera to focus before each shot, set the camera to manual mode.
 
-Then start the app set the shoot interval and the amount of pictures it should take. Below the seek bars you can see how long it will take to shoot all the photos and how long the video will be. The fps setting only changes the calculation of the video length, the app doesn't produce a video.
+Then start the app set the shoot interval and the amount of pictures it should take. The delay slider can be used to delay the start of the timelapse recording (set to zero to start immediately). Below the seek bars you can see how long it will take to shoot all the photos and how long the video will be. The fps setting only changes the calculation of the video length, the app doesn't produce a video.
 
 Finally click the start button and wait.
 

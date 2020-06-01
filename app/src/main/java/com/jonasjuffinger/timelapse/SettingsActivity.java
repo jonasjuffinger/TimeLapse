@@ -27,6 +27,9 @@ public class SettingsActivity extends BaseActivity
 
     private Button bnStart, bnClose;
 
+    private AdvancedSeekBar sbDelay;
+    private TextView tvDelayValue, tvDelayUnit;
+
     private AdvancedSeekBar sbInterval;
     private TextView tvIntervalValue, tvIntervalUnit;
 
@@ -68,10 +71,14 @@ public class SettingsActivity extends BaseActivity
         tvIntervalValue = (TextView) findViewById(R.id.tvIntervalValue);
         tvIntervalUnit = (TextView) findViewById(R.id.tvIntervalUnit);
 
+        tvDelayValue = (TextView) findViewById(R.id.tvDelayValue);
+        tvDelayUnit = (TextView) findViewById(R.id.tvDelayUnit);
+
         tvDurationValue = (TextView) findViewById(R.id.tvDurationValue);
         tvDurationUnit = (TextView) findViewById(R.id.tvDurationUnit);
         tvVideoTimeValue = (TextView) findViewById(R.id.tvVideoTimeValue);
         tvVideoTimeUnit = (TextView) findViewById(R.id.tvVideoTimeUnit);
+        sbDelay = (AdvancedSeekBar) findViewById((R.id.sbDelay));
         sbInterval = (AdvancedSeekBar) findViewById(R.id.sbInterval);
         tvShotsValue = (TextView) findViewById(R.id.tvShotsValue);
         sbShots = (AdvancedSeekBar) findViewById(R.id.sbShots);
@@ -81,6 +88,11 @@ public class SettingsActivity extends BaseActivity
         cbSilentShutter = (CheckBox) findViewById(R.id.cbSilentShutter);
         cbAEL = (CheckBox) findViewById(R.id.cbAEL);
         cbBRS = (CheckBox) findViewById(R.id.cbBRC);
+
+        sbDelay.setMax(59*5 + 2);
+        sbDelay.setOnSeekBarChangeListener(sbDelayOnSeekBarChangeListener);
+        sbDelay.setProgress(settings.rawDelay);
+        sbDelayOnSeekBarChangeListener.onProgressChanged(sbDelay, settings.rawDelay, false);
 
         sbInterval.setMax(119);
         sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
@@ -190,6 +202,41 @@ public class SettingsActivity extends BaseActivity
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {}
     },
+
+    sbDelayOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+            String delayTextValue = "";
+            String delayUnit = "";
+
+            if(i <= 59) {
+                settings.rawDelay = i;
+                settings.delay = i * 1000;
+                delayTextValue = Integer.toString(settings.rawDelay);
+                delayUnit = "s";
+            }else if(i <= 59+179) {
+                settings.rawDelay = i - 59;
+                settings.delay = settings.rawDelay * 60 * 1000;
+                delayTextValue = Integer.toString(settings.rawDelay);
+                delayUnit = "m";
+            }else if(i > 59+179) {
+                settings.rawDelay = i - 59-180 + 2;
+                settings.delay = settings.rawDelay * 60 * 60 * 1000;
+                delayTextValue = Integer.toString(settings.rawDelay);
+                delayUnit = "h";
+            }
+
+            tvDelayValue.setText(delayTextValue);
+            tvDelayUnit.setText(delayUnit);
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) { }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {}
+    },
+
     sbShotsOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
         @Override
         public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
@@ -311,24 +358,28 @@ public class SettingsActivity extends BaseActivity
     }
 
     protected boolean onUpperDialChanged(int value) {
+        sbDelay.dialChanged(value);
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
         return true;
     }
 
     protected boolean onLowerDialChanged(int value) {
+        sbDelay.dialChanged(value);
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
         return true;
     }
 
     protected boolean onThirdDialChanged(int value) {
+        sbDelay.dialChanged(value);
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
         return true;
     }
 
     protected boolean onKuruDialChanged(int value) {
+        sbDelay.dialChanged(value);
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
         return true;
