@@ -15,7 +15,7 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginBottom="5dp"
             android:orientation="horizontal">
 
             <TextView
@@ -26,17 +26,6 @@
                 android:gravity="center_vertical"
                 android:text="Interval"
                 android:textSize="20sp" />
-
-            <view
-                android:id="@+id/sbInterval"
-                class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
-                android:layout_width="240dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="10dp"
-                android:layout_toLeftOf="@+id/tvIntervalValue"
-                android:layout_toRightOf="@+id/lblInterval"
-                android:gravity="center_vertical" />
 
             <TextView
                 android:id="@+id/tvIntervalUnit"
@@ -58,12 +47,23 @@
                 android:gravity="right|center_vertical"
                 android:text="10.5"
                 android:textSize="20sp" />
+
+            <view
+                android:id="@+id/sbInterval"
+                class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/tvIntervalValue"
+                android:layout_toRightOf="@+id/lblInterval"
+                android:gravity="center_vertical" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="10dp"
             android:orientation="horizontal">
 
             <TextView
@@ -75,6 +75,17 @@
                 android:text="Shots"
                 android:textSize="20sp" />
 
+            <TextView
+                android:id="@+id/tvShotsValue"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="45dp"
+                android:gravity="right|center_vertical"
+                android:text="1"
+                android:textSize="20sp" />
+
             <view
                 android:id="@+id/sbShots"
                 class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
@@ -84,17 +95,6 @@
                 android:layout_toLeftOf="@+id/tvShotsValue"
                 android:layout_toRightOf="@+id/lblShots"
                 android:gravity="center_vertical" />
-
-            <TextView
-                android:id="@+id/tvShotsValue"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="45dp"
-                android:gravity="right|center_vertical"
-                android:text="1"
-                android:textSize="20sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -165,7 +165,8 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp">
 
             <CheckBox
                 android:id="@+id/cbSilentShutter"
@@ -175,27 +176,85 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginLeft="10dp"
                 android:checked="true"
-                android:text="Silent Shutter" />
+                android:text="SS" />
 
             <CheckBox
-                    android:id="@+id/cbAEL"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="10dp"
-                    android:checked="false"
-                    android:layout_toRightOf="@id/cbSilentShutter"
-                    android:text="AEL" />
+                android:id="@+id/cbMF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/cbSilentShutter"
+                android:checked="false"
+                android:text="MF" />
 
             <CheckBox
-                    android:id="@+id/cbBRC"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginLeft="10dp"
-                    android:checked="false"
-                    android:layout_toRightOf="@id/cbAEL"
-                    android:text="BRC3" />
+                android:id="@+id/cbAEL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/cbMF"
+                android:checked="false"
+                android:text="AEL" />
+
+            <CheckBox
+                android:id="@+id/cbBRC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/cbAEL"
+                android:checked="false"
+                android:text="BRC3" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/lblDelay"
+                android:layout_width="80dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:gravity="center_vertical"
+                android:text="Delay"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvDelayUnit"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:gravity="center_vertical"
+                android:text="min"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/tvDelayValue"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:layout_toLeftOf="@+id/tvDelayUnit"
+                android:gravity="right|center_vertical"
+                android:text="10.5"
+                android:textSize="20sp" />
+
+            <view
+                android:id="@+id/sbDelay"
+                class="com.jonasjuffinger.timelapse.AdvancedSeekBar"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="10dp"
+                android:layout_toLeftOf="@+id/tvDelayValue"
+                android:layout_toRightOf="@+id/lblDelay"
+                android:gravity="center_vertical" />
         </RelativeLayout>
     </LinearLayout>
 

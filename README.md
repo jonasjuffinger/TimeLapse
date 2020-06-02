@@ -17,10 +17,13 @@ Finally click the start button and wait.
 
 You can stop by clicking the MENU button on the camera.
 
-## Silent Shutter ##
+## SS (Silent Shutter) ##
 The silent shutter option is functionless on cameras without silent shutter mode.
 
-## AEL ##
+## MF (Manual Focus) ##
+This sets focus mode to manual. Be sure to have focused before starting the app!
+
+## AEL (Auto Exposure Lock) ##
 This locks the exposure to the exposure of the first shot.
 
 ## BRC3 ##
@@ -33,4 +36,4 @@ When selecting the lowest interval the camera is in burst mode. In this mode it 
 
 If the app crashes the camera, please try the following camera settings. They were reported to work with the RX100 M4.
  - The silent shutter needs to be disabled or unchecked in the app, on some cameras
- - The app will not run if you are set or self time or continous shooting - Only Single shoot will work.
+ - The app will not run if you are set or self time or continuous shooting - Only Single shoot will work.

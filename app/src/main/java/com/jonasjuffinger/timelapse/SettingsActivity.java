@@ -37,12 +37,16 @@ public class SettingsActivity extends BaseActivity
     private TextView tvDurationValue, tvDurationUnit;
     private TextView tvVideoTimeValue, tvVideoTimeUnit;
 
+    private AdvancedSeekBar sbDelay;
+    private TextView tvDelayValue, tvDelayUnit;
+
     private int fps;
     private Spinner spnFps;
 
     private CheckBox cbSilentShutter;
     private CheckBox cbAEL;
     private CheckBox cbBRS;
+    private CheckBox cbMF;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -78,9 +82,14 @@ public class SettingsActivity extends BaseActivity
         lblShots = (TextView) findViewById(R.id.lblShots);
         spnFps = (Spinner) findViewById(R.id.spnFps);
 
+        sbDelay = (AdvancedSeekBar) findViewById(R.id.sbDelay);
+        tvDelayValue = (TextView) findViewById(R.id.tvDelayValue);
+        tvDelayUnit = (TextView) findViewById(R.id.tvDelayUnit);
+
         cbSilentShutter = (CheckBox) findViewById(R.id.cbSilentShutter);
         cbAEL = (CheckBox) findViewById(R.id.cbAEL);
         cbBRS = (CheckBox) findViewById(R.id.cbBRC);
+        cbMF  = (CheckBox) findViewById(R.id.cbMF);
 
         sbInterval.setMax(119);
         sbInterval.setOnSeekBarChangeListener(sbIntervalOnSeekBarChangeListener);
@@ -91,6 +100,11 @@ public class SettingsActivity extends BaseActivity
         sbShots.setOnSeekBarChangeListener(sbShotsOnSeekBarChangeListener);
         sbShots.setProgress(settings.rawShotCount);
         sbShotsOnSeekBarChangeListener.onProgressChanged(sbShots, settings.rawShotCount, false);
+
+        sbDelay.setMax(39);
+        sbDelay.setOnSeekBarChangeListener(sbDelayOnSeekBarChangeListener);
+        sbDelay.setProgress(settings.rawDelay);
+        sbDelayOnSeekBarChangeListener.onProgressChanged(sbDelay, settings.rawDelay, false);
 
         spnFps.setSelection(settings.fps);
         spnFps.setOnItemSelectedListener(spnFpsOnItemSelectedListener);
@@ -104,6 +118,9 @@ public class SettingsActivity extends BaseActivity
 
         cbBRS.setChecked(settings.brs);
         cbBRS.setOnCheckedChangeListener(cbBRSOnCheckListener);
+
+        cbMF.setChecked(settings.mf);
+        cbMF.setOnCheckedChangeListener(cbMFOnCheckListener);
 
         //try {
             //CameraEx cameraEx = CameraEx.open(0, null);
@@ -169,7 +186,7 @@ public class SettingsActivity extends BaseActivity
                 intervalTextValue = Double.toString((i-76) * 0.5 + 2);
                 intervalUnit = "min";
             }
-            else if(i < 120) {
+            else {
                 settings.interval = (i-93) * 60 + 660;
                 intervalTextValue = Integer.toString(i-93+11);
                 intervalUnit = "min";
@@ -229,6 +246,41 @@ public class SettingsActivity extends BaseActivity
         public void onStartTrackingTouch(SeekBar seekBar) {}
         @Override
         public void onStopTrackingTouch(SeekBar seekBar) {}
+    },
+    sbDelayOnSeekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int i, boolean fromUser) {
+            String delayTextValue = "";
+            String delayUnit = "";
+
+            settings.rawDelay = i;
+
+            if(i < 6) {
+                settings.delay = i;
+                delayTextValue = Double.toString(settings.delay);
+                delayUnit = "min";
+
+            }
+            else if(i < 16) {
+                settings.delay = (i-5)*5 + 5;
+                delayTextValue = Double.toString(settings.delay);
+                delayUnit = "min";
+            }
+            else {
+                settings.delay = (i-15) * 60;
+                delayTextValue = Double.toString(i-15);
+                delayUnit = "h";
+            }
+            tvDelayValue.setText(delayTextValue);
+            tvDelayUnit.setText(delayUnit);
+
+            updateTimes();
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {}
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {}
     };
 
     AdapterView.OnItemSelectedListener spnFpsOnItemSelectedListener
@@ -263,6 +315,13 @@ public class SettingsActivity extends BaseActivity
         @Override
         public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
             settings.brs = b;
+        }
+    };
+
+    CheckBox.OnCheckedChangeListener cbMFOnCheckListener = new CheckBox.OnCheckedChangeListener() {
+        @Override
+        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+            settings.mf = b;
         }
     };
 
@@ -313,24 +372,28 @@ public class SettingsActivity extends BaseActivity
     protected boolean onUpperDialChanged(int value) {
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
+        sbDelay.dialChanged(value);
         return true;
     }
 
     protected boolean onLowerDialChanged(int value) {
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
+        sbDelay.dialChanged(value);
         return true;
     }
 
     protected boolean onThirdDialChanged(int value) {
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
+        sbDelay.dialChanged(value);
         return true;
     }
 
     protected boolean onKuruDialChanged(int value) {
         sbInterval.dialChanged(value);
         sbShots.dialChanged(value);
+        sbDelay.dialChanged(value);
         return true;
     }
 
