@@ -207,6 +207,16 @@
                 android:layout_toRightOf="@id/cbAEL"
                 android:checked="false"
                 android:text="BRC3" />
+
+            <CheckBox
+                android:id="@+id/cbDOFF"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/cbBRC"
+                android:checked="false"
+                android:text="DOFF" />
         </RelativeLayout>
 
         <RelativeLayout

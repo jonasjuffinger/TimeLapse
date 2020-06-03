@@ -64,7 +64,8 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
                 stopPicturePreview = false;
                 camera.stopPreview();
                 reviewSurfaceView.setVisibility(View.GONE);
-                //display.off();
+                if(settings.displayOff)
+                    display.off();
             }
 
             if(burstShooting) {
@@ -81,10 +82,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
                 if (remainingTime <= 150) { // 300ms is vaguely the time this postDelayed is to slow
                     brck.getAndDecrement();
                     shoot();
-                    if(!settings.displayOff) {
-                        log(Boolean.toString(settings.displayOff));
-                        display.on();
-                    }
+                    display.on();
                 } else {
                     shootRunnableHandler.postDelayed(this, remainingTime-150);
                 }
@@ -214,8 +212,8 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
 
         cameraEx.getNormalCamera().setParameters(params);
 
-        pictureReviewTime = autoReviewControl.getPictureReviewTime();
-        log(Integer.toString(pictureReviewTime));
+        pictureReviewTime = 2; //autoReviewControl.getPictureReviewTime();
+        //log(Integer.toString(pictureReviewTime));
 
 
         shotCount = 0;
@@ -365,7 +363,7 @@ public class ShootActivity extends BaseActivity implements SurfaceHolder.Callbac
         else {
             this.cameraEx.cancelTakePicture();
 
-            camera.startPreview();
+            //camera.startPreview();
 
             if (shotCount < settings.shotCount * getcnt()) {
 

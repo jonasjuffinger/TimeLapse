@@ -29,6 +29,9 @@ This locks the exposure to the exposure of the first shot.
 ## BRC3 ##
 The app supports exposure bracketing. Set the mode to three-image exposure bracketing outside of the app and check BRC3 checkbox in the app. The app will always take three pictures. Keep in mind that the interval time must be large enough to take all three pictures.
 
+## DOFF (Display Off) ##
+Turn the display off between each shot. This doesn't change the battery consumption but it can be healthy for the display when taking very long time lapses.
+
 ## Burst mode ##
 When selecting the lowest interval the camera is in burst mode. In this mode it takes pictures as fast as it can write to the SD card for the duration set by the second slider.
 

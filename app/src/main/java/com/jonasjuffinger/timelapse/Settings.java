@@ -95,6 +95,7 @@ class Settings {
         editor.putInt("fps", fps);
         editor.putBoolean("brs", brs);
         editor.putBoolean("mf", mf);
+        editor.putBoolean("displayOff", displayOff);
         editor.apply();
     }
 
@@ -109,5 +110,6 @@ class Settings {
         fps = sharedPref.getInt("fps", fps);
         brs = sharedPref.getBoolean("brs", brs);
         mf = sharedPref.getBoolean("mf", mf);
+        displayOff = sharedPref.getBoolean("displayOff", displayOff);
     }
 }
